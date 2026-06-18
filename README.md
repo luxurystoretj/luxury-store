@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Luxury Store
 
-## Getting Started
+**Цифровой каталог премиального мужского бутика.**
 
-First, run the development server:
+Luxury Store — это представительская платформа-каталог, а не классический интернет-магазин.
+Проект решает четыре задачи: представление бренда в интернете, демонстрация ассортимента,
+показ готовых сочетаний товаров и предоставление сотрудникам бутика инструмента управления
+контентом.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Сайт ориентирован на мужчин 25–55 лет с высоким доходом и должен ощущаться как цифровое
+продолжение дорогого бутика — премиальный сайт-каталог, а не маркетплейс.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Ключевые возможности (MVP)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Главная страница** с управляемыми блоками: Hero, баннер коллекции, новые поступления,
+  популярные товары, блок о бренде и контакты.
+- **Каталог** с поиском, фильтрами (бренд, категория, цвет, размер) и сортировкой.
+- **Карточка товара** с галереей, описанием, составом, ценами в сомони и долларах,
+  размерами и статусом наличия.
+- **«Сочетается с этим»** — ключевая функция: связанные товары, которые администратор
+  привязывает вручную (без алгоритмов и AI).
+- **Бренды и категории** с описанием и логотипами.
+- **Админ-панель** для управления товарами, брендами, категориями, изображениями,
+  связями товаров и контентом главной страницы.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Технологический стек
 
-## Learn More
+- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, shadcn/ui.
+- **Backend:** Next.js API Routes, TypeScript, Prisma ORM.
+- **База данных:** PostgreSQL.
+- **Авторизация:** одна роль — ADMIN (NextAuth или собственная admin-auth система).
+- **Файловое хранилище:** Cloudflare R2 (предпочтительно) или AWS S3.
 
-To learn more about Next.js, take a look at the following resources:
+## Вне рамок MVP
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Корзина, оформление заказа, онлайн-оплата, избранное, личный кабинет клиента, история
+заказов, программа лояльности, AI-рекомендации, чат, уведомления, CRM-интеграции и
+аналитика продаж — в первую версию не входят.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Команда
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Два разработчика: Frontend и Backend. Backend-разработчик является единственным владельцем
+`schema.prisma` и миграций.
