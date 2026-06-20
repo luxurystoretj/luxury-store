@@ -1,7 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Luxury Store database schema.
+// Source of truth: docs/luxury-store-specification.md -> "Part 2. Database Schema v1.0".
 
 generator client {
   provider = "prisma-client"
@@ -10,4 +11,124 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// 2.2. brands
+model Brand {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logoUrl     String?  @map("logo_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Brand -> Products (1 to many)
+  products Product[]
+
+  @@map("brands")
+}
+
+// 2.3. categories
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Category -> Products (1 to many)
+  products Product[]
+
+  @@map("categories")
+}
+
+// 2.4. products
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  composition String?
+  priceTjs    Decimal  @map("price_tjs") @db.Decimal(12, 2)
+  priceUsd    Decimal  @map("price_usd") @db.Decimal(12, 2)
+  brandId     String   @map("brand_id")
+  categoryId  String   @map("category_id")
+  isActive    Boolean  @default(true) @map("is_active")
+  isFeatured  Boolean  @default(false) @map("is_featured")
+  isNew       Boolean  @default(false) @map("is_new")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  brand    Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  images ProductImage[]
+  sizes  ProductSize[]
+
+  // Self-referencing many-to-many via product_relations.
+  relatedFrom ProductRelation[] @relation("ProductRelationSource")
+  relatedTo   ProductRelation[] @relation("ProductRelationTarget")
+
+  @@index([brandId])
+  @@index([categoryId])
+  @@map("products")
+}
+
+// 2.5. product_images
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  imageUrl  String   @map("image_url")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+// 2.6. product_sizes
+model ProductSize {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  size      String
+  quantity  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_sizes")
+}
+
+// 2.7. product_relations (self-referencing many-to-many join table)
+model ProductRelation {
+  id               String   @id @default(cuid())
+  productId        String   @map("product_id")
+  relatedProductId String   @map("related_product_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  product        Product @relation("ProductRelationSource", fields: [productId], references: [id], onDelete: Cascade)
+  relatedProduct Product @relation("ProductRelationTarget", fields: [relatedProductId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, relatedProductId])
+  @@index([productId])
+  @@index([relatedProductId])
+  @@map("product_relations")
+}
+
+// 2.8. homepage_sections (independent content table)
+model HomepageSection {
+  id         String   @id @default(cuid())
+  sectionKey String   @unique @map("section_key")
+  title      String?
+  subtitle   String?
+  imageUrl   String?  @map("image_url")
+  videoUrl   String?  @map("video_url")
+  isActive   Boolean  @default(true) @map("is_active")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("homepage_sections")
 }
