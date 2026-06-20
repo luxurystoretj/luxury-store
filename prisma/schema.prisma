@@ -50,6 +50,7 @@ model Product {
   slug        String   @unique
   description String?
   composition String?
+  color       String?
   priceTjs    Decimal  @map("price_tjs") @db.Decimal(12, 2)
   priceUsd    Decimal  @map("price_usd") @db.Decimal(12, 2)
   brandId     String   @map("brand_id")

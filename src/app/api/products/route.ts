@@ -36,16 +36,9 @@ export async function GET(request: Request) {
       ];
     }
 
-    // No dedicated color column: search the color term in name or description.
+    // Filter by the dedicated color column (case-insensitive, partial match).
     if (color) {
-      where.AND = [
-        {
-          OR: [
-            { name: { contains: color, mode: "insensitive" } },
-            { description: { contains: color, mode: "insensitive" } },
-          ],
-        },
-      ];
+      where.color = { contains: color, mode: "insensitive" };
     }
 
     // Brand can be provided either as id or slug.

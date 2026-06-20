@@ -98,6 +98,7 @@ async function main() {
       description:
         "Классический чёрный смокинг приталенного силуэта из шерсти с шёлковыми лацканами.",
       composition: "98% шерсть, 2% шёлк",
+      color: "Чёрный",
       priceTjs: 42000,
       priceUsd: toUsd(42000),
       brandId: tomFord.id,
@@ -135,6 +136,7 @@ async function main() {
       description:
         "Тёмно-синий двубортный костюм ручной работы из тонкой итальянской шерсти.",
       composition: "100% шерсть Super 150's",
+      color: "Тёмно-синий",
       priceTjs: 55000,
       priceUsd: toUsd(55000),
       brandId: brioni.id,
@@ -167,6 +169,7 @@ async function main() {
       description:
         "Светло-серый однобортный костюм из фирменной ткани High Performance.",
       composition: "100% шерсть Zegna High Performance",
+      color: "Серый",
       priceTjs: 38000,
       priceUsd: toUsd(38000),
       brandId: zegna.id,
@@ -199,6 +202,7 @@ async function main() {
       description:
         "Чёрные оксфорды из телячьей кожи с зеркальной полировкой, ручная сборка.",
       composition: "100% телячья кожа",
+      color: "Чёрный",
       priceTjs: 18000,
       priceUsd: toUsd(18000),
       brandId: tomFord.id,
@@ -232,6 +236,7 @@ async function main() {
       description:
         "Коричневые дерби из кожи с фактурой, удобная кожаная подошва.",
       composition: "100% натуральная кожа",
+      color: "Коричневый",
       priceTjs: 14000,
       priceUsd: toUsd(14000),
       brandId: canali.id,
@@ -264,6 +269,7 @@ async function main() {
       description:
         "Чёрный ремень из кожи аллигатора с фирменной пряжкой из палладия.",
       composition: "100% кожа аллигатора",
+      color: "Чёрный",
       priceTjs: 12000,
       priceUsd: toUsd(12000),
       brandId: brioni.id,
@@ -296,6 +302,7 @@ async function main() {
       description:
         "Тёмно-синий галстук из плотного шёлка жаккардового плетения.",
       composition: "100% шёлк",
+      color: "Тёмно-синий",
       priceTjs: 11500,
       priceUsd: toUsd(11500),
       brandId: zegna.id,
@@ -324,6 +331,7 @@ async function main() {
       description:
         "Классические часы с корпусом из нержавеющей стали и кожаным ремешком.",
       composition: "Нержавеющая сталь, сапфировое стекло, кожаный ремешок",
+      color: "Серебристый",
       priceTjs: 25000,
       priceUsd: toUsd(25000),
       brandId: canali.id,
