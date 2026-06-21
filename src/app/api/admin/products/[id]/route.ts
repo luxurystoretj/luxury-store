@@ -2,35 +2,9 @@ import { NextResponse } from "next/server";
 
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db/prisma";
+import { parseSizes, type SizeInput } from "@/lib/utils/product";
 
 type RouteContext = { params: Promise<{ id: string }> };
-
-type SizeInput = { size: string; quantity: number };
-
-/**
- * Validates an optional `sizes` payload into a typed array.
- * Returns `null` when the field is absent, or throws a string error message
- * when the shape is invalid.
- */
-function parseSizes(sizes: unknown): SizeInput[] | null {
-  if (sizes === undefined) return null;
-  if (!Array.isArray(sizes)) {
-    throw "Field 'sizes' must be an array.";
-  }
-  return sizes.map((entry) => {
-    const { size, quantity } = (entry ?? {}) as {
-      size?: unknown;
-      quantity?: unknown;
-    };
-    if (typeof size !== "string" || !size.trim()) {
-      throw "Each size requires a non-empty 'size' string.";
-    }
-    if (typeof quantity !== "number" || !Number.isInteger(quantity) || quantity < 0) {
-      throw "Each size requires a non-negative integer 'quantity'.";
-    }
-    return { size: size.trim(), quantity };
-  });
-}
 
 /**
  * PATCH /api/admin/products/[id]
@@ -110,9 +84,12 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     let sizes: SizeInput[] | null;
     try {
       sizes = parseSizes(b.sizes);
-    } catch (message) {
+    } catch (error) {
       return NextResponse.json(
-        { success: false, message: String(message) },
+        {
+          success: false,
+          message: error instanceof Error ? error.message : "Invalid sizes",
+        },
         { status: 400 },
       );
     }

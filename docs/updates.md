@@ -22,3 +22,9 @@ These are accepted trade-offs for the MVP and should be hardened before producti
 
 - **Auth token is static, no server-side expiry.** The `admin_token` cookie value is a deterministic `SHA-256(ADMIN_PASS)`. The 24h lifetime is enforced only by the browser cookie `maxAge`; the server accepts the raw value until `ADMIN_PASS` rotates, so a leaked cookie is replayable. Future fix: sign a payload (with an `exp` claim) using a dedicated `AUTH_SECRET` (HMAC) and verify expiry server-side.
 - **No brute-force protection on login.** `POST /api/auth/login` has no rate limiting, and the password is compared with `===` (not constant-time). Future fix: add rate limiting and use a constant-time comparison.
+
+---
+
+## Strict Rules
+
+**R2 Upload SSL Errors** - If an `SSL alert 40` or `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` error occurs during file uploads to Cloudflare R2, DO NOT touch or modify the code. You must contact the backend developer immediately.

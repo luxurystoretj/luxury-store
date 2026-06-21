@@ -11,7 +11,7 @@ import { prisma } from "@/lib/db/prisma";
  *   - search:   matches product name or description (case-insensitive)
  *   - brand:    brand id or slug
  *   - category: category id or slug
- *   - color:    matched inside name or description (no dedicated color column)
+ *   - color:    case-insensitive partial match on the dedicated color column
  *   - size:     only products having that size in stock (quantity > 0)
  *   - sort:     "new" | "price_asc" | "price_desc" (default: newest first)
  */
