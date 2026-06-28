@@ -9,7 +9,8 @@ type RouteContext = { params: Promise<{ id: string }> };
  * PATCH /api/admin/brands/[id]
  *
  * Admin endpoint for partial updates of a brand.
- * Accepts any subset of: `name`, `slug`, `description`, `logoUrl`.
+ * Accepts any subset of: `name`, `slug`, `descriptionRu`, `descriptionTj`,
+ * `descriptionEn`, `logoUrl`.
  */
 export async function PATCH(request: Request, { params }: RouteContext) {
   try {
@@ -25,12 +26,8 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       );
     }
 
-    const { name, slug, description, logoUrl } = (body ?? {}) as {
-      name?: unknown;
-      slug?: unknown;
-      description?: unknown;
-      logoUrl?: unknown;
-    };
+    const b = (body ?? {}) as Record<string, unknown>;
+    const { name, slug } = b;
 
     const data: Prisma.BrandUpdateInput = {};
 
@@ -52,11 +49,13 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       }
       data.slug = slug.trim();
     }
-    if (description !== undefined) {
-      data.description = typeof description === "string" ? description : null;
+    for (const field of ["descriptionRu", "descriptionTj", "descriptionEn"] as const) {
+      if (b[field] !== undefined) {
+        data[field] = typeof b[field] === "string" ? (b[field] as string) : null;
+      }
     }
-    if (logoUrl !== undefined) {
-      data.logoUrl = typeof logoUrl === "string" ? logoUrl : null;
+    if (b.logoUrl !== undefined) {
+      data.logoUrl = typeof b.logoUrl === "string" ? b.logoUrl : null;
     }
 
     const brand = await prisma.brand.update({ where: { id }, data });

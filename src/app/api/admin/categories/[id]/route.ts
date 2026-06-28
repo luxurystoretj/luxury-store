@@ -9,7 +9,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * PATCH /api/admin/categories/[id]
  *
  * Admin endpoint for partial updates of a category.
- * Accepts any subset of: `name`, `slug`.
+ * Accepts any subset of: `nameRu`, `nameTj`, `nameEn`, `slug`.
  */
 export async function PATCH(request: Request, { params }: RouteContext) {
   try {
@@ -25,30 +25,19 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       );
     }
 
-    const { name, slug } = (body ?? {}) as {
-      name?: unknown;
-      slug?: unknown;
-    };
-
+    const b = (body ?? {}) as Record<string, unknown>;
     const data: Prisma.CategoryUpdateInput = {};
 
-    if (name !== undefined) {
-      if (typeof name !== "string" || !name.trim()) {
-        return NextResponse.json(
-          { success: false, message: "Field 'name' must be a non-empty string." },
-          { status: 400 },
-        );
+    for (const field of ["nameRu", "nameTj", "nameEn", "slug"] as const) {
+      if (b[field] !== undefined) {
+        if (typeof b[field] !== "string" || !(b[field] as string).trim()) {
+          return NextResponse.json(
+            { success: false, message: `Field '${field}' must be a non-empty string.` },
+            { status: 400 },
+          );
+        }
+        data[field] = (b[field] as string).trim();
       }
-      data.name = name.trim();
-    }
-    if (slug !== undefined) {
-      if (typeof slug !== "string" || !slug.trim()) {
-        return NextResponse.json(
-          { success: false, message: "Field 'slug' must be a non-empty string." },
-          { status: 400 },
-        );
-      }
-      data.slug = slug.trim();
     }
 
     const category = await prisma.category.update({ where: { id }, data });

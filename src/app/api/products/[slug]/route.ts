@@ -33,7 +33,9 @@ export async function GET(
             relatedProduct: {
               select: {
                 id: true,
-                name: true,
+                nameRu: true,
+                nameTj: true,
+                nameEn: true,
                 slug: true,
                 priceTjs: true,
                 priceUsd: true,

@@ -15,13 +15,15 @@ datasource db {
 
 // 2.2. brands
 model Brand {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  logoUrl     String?  @map("logo_url")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  descriptionRu String?  @map("description_ru")
+  descriptionTj String?  @map("description_tj")
+  descriptionEn String?  @map("description_en")
+  logoUrl       String?  @map("logo_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   // Brand -> Products (1 to many)
   products Product[]
@@ -32,7 +34,9 @@ model Brand {
 // 2.3. categories
 model Category {
   id        String   @id @default(cuid())
-  name      String
+  nameRu    String   @map("name_ru")
+  nameTj    String   @map("name_tj")
+  nameEn    String   @map("name_en")
   slug      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -45,21 +49,29 @@ model Category {
 
 // 2.4. products
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  composition String?
-  color       String?
-  priceTjs    Decimal  @map("price_tjs") @db.Decimal(12, 2)
-  priceUsd    Decimal  @map("price_usd") @db.Decimal(12, 2)
-  brandId     String   @map("brand_id")
-  categoryId  String   @map("category_id")
-  isActive    Boolean  @default(true) @map("is_active")
-  isFeatured  Boolean  @default(false) @map("is_featured")
-  isNew       Boolean  @default(false) @map("is_new")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            String   @id @default(cuid())
+  nameRu        String   @map("name_ru")
+  nameTj        String   @map("name_tj")
+  nameEn        String   @map("name_en")
+  slug          String   @unique
+  descriptionRu String?  @map("description_ru")
+  descriptionTj String?  @map("description_tj")
+  descriptionEn String?  @map("description_en")
+  compositionRu String?  @map("composition_ru")
+  compositionTj String?  @map("composition_tj")
+  compositionEn String?  @map("composition_en")
+  colorRu       String?  @map("color_ru")
+  colorTj       String?  @map("color_tj")
+  colorEn       String?  @map("color_en")
+  priceTjs      Decimal  @map("price_tjs") @db.Decimal(12, 2)
+  priceUsd      Decimal  @map("price_usd") @db.Decimal(12, 2)
+  brandId       String   @map("brand_id")
+  categoryId    String   @map("category_id")
+  isActive      Boolean  @default(true) @map("is_active")
+  isFeatured    Boolean  @default(false) @map("is_featured")
+  isNew         Boolean  @default(false) @map("is_new")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   brand    Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -125,8 +137,12 @@ model ProductRelation {
 model HomepageSection {
   id         String   @id @default(cuid())
   sectionKey String   @unique @map("section_key")
-  title      String?
-  subtitle   String?
+  titleRu    String?  @map("title_ru")
+  titleTj    String?  @map("title_tj")
+  titleEn    String?  @map("title_en")
+  subtitleRu String?  @map("subtitle_ru")
+  subtitleTj String?  @map("subtitle_tj")
+  subtitleEn String?  @map("subtitle_en")
   imageUrl   String?  @map("image_url")
   videoUrl   String?  @map("video_url")
   isActive   Boolean  @default(true) @map("is_active")

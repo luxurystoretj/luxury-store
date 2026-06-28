@@ -7,6 +7,9 @@ import { prisma } from "@/lib/db/prisma";
  * brands, categories, products (with images and sizes),
  * product relations ("Matches with this") and a homepage section.
  *
+ * Text fields are trilingual (RU/TJ/EN). For mock data the TJ and EN values
+ * are derived from the Russian value by appending " TJ" / " EN".
+ *
  * The script is idempotent: it clears existing data before inserting,
  * so it can be re-run safely.
  */
@@ -15,6 +18,38 @@ import { prisma } from "@/lib/db/prisma";
 const TJS_PER_USD = 11;
 
 const toUsd = (tjs: number): number => Math.round(tjs / TJS_PER_USD);
+
+// Trilingual mock helpers: derive TJ/EN from the Russian base string.
+const nameTri = (ru: string) => ({
+  nameRu: ru,
+  nameTj: `${ru} TJ`,
+  nameEn: `${ru} EN`,
+});
+const descTri = (ru: string) => ({
+  descriptionRu: ru,
+  descriptionTj: `${ru} TJ`,
+  descriptionEn: `${ru} EN`,
+});
+const compTri = (ru: string) => ({
+  compositionRu: ru,
+  compositionTj: `${ru} TJ`,
+  compositionEn: `${ru} EN`,
+});
+const colorTri = (ru: string) => ({
+  colorRu: ru,
+  colorTj: `${ru} TJ`,
+  colorEn: `${ru} EN`,
+});
+const titleTri = (ru: string) => ({
+  titleRu: ru,
+  titleTj: `${ru} TJ`,
+  titleEn: `${ru} EN`,
+});
+const subtitleTri = (ru: string) => ({
+  subtitleRu: ru,
+  subtitleTj: `${ru} TJ`,
+  subtitleEn: `${ru} EN`,
+});
 
 async function clearDatabase() {
   // Delete in dependency order (children first) to respect foreign keys.
@@ -37,8 +72,9 @@ async function main() {
     data: {
       name: "Tom Ford",
       slug: "tom-ford",
-      description:
+      ...descTri(
         "Американский люксовый бренд, известный безупречными смокингами и строгими костюмами.",
+      ),
       logoUrl: "https://placehold.co/200x80?text=Tom+Ford",
     },
   });
@@ -47,8 +83,9 @@ async function main() {
     data: {
       name: "Brioni",
       slug: "brioni",
-      description:
+      ...descTri(
         "Итальянский дом высокой мужской моды, символ ручного пошива и абсолютной роскоши.",
+      ),
       logoUrl: "https://placehold.co/200x80?text=Brioni",
     },
   });
@@ -57,8 +94,9 @@ async function main() {
     data: {
       name: "Ermenegildo Zegna",
       slug: "ermenegildo-zegna",
-      description:
+      ...descTri(
         "Легендарный итальянский бренд, создающий собственные премиальные ткани с 1910 года.",
+      ),
       logoUrl: "https://placehold.co/200x80?text=Zegna",
     },
   });
@@ -67,38 +105,40 @@ async function main() {
     data: {
       name: "Canali",
       slug: "canali",
-      description:
+      ...descTri(
         "Семейный итальянский бренд элегантной мужской одежды премиум-класса.",
+      ),
       logoUrl: "https://placehold.co/200x80?text=Canali",
     },
   });
 
   // --- Categories -----------------------------------------------------------
   const suits = await prisma.category.create({
-    data: { name: "Костюмы", slug: "suits" },
+    data: { ...nameTri("Костюмы"), slug: "suits" },
   });
 
   const shoes = await prisma.category.create({
-    data: { name: "Обувь", slug: "shoes" },
+    data: { ...nameTri("Обувь"), slug: "shoes" },
   });
 
   const accessories = await prisma.category.create({
-    data: { name: "Аксессуары", slug: "accessories" },
+    data: { ...nameTri("Аксессуары"), slug: "accessories" },
   });
 
   const watches = await prisma.category.create({
-    data: { name: "Часы", slug: "watches" },
+    data: { ...nameTri("Часы"), slug: "watches" },
   });
 
   // --- Products -------------------------------------------------------------
   const blackTuxedo = await prisma.product.create({
     data: {
-      name: "Смокинг Tom Ford «Shelton»",
+      ...nameTri("Смокинг Tom Ford «Shelton»"),
       slug: "tom-ford-shelton-tuxedo",
-      description:
+      ...descTri(
         "Классический чёрный смокинг приталенного силуэта из шерсти с шёлковыми лацканами.",
-      composition: "98% шерсть, 2% шёлк",
-      color: "Чёрный",
+      ),
+      ...compTri("98% шерсть, 2% шёлк"),
+      ...colorTri("Чёрный"),
       priceTjs: 42000,
       priceUsd: toUsd(42000),
       brandId: tomFord.id,
@@ -131,12 +171,13 @@ async function main() {
 
   const navySuit = await prisma.product.create({
     data: {
-      name: "Костюм Brioni «Brunico»",
+      ...nameTri("Костюм Brioni «Brunico»"),
       slug: "brioni-brunico-suit",
-      description:
+      ...descTri(
         "Тёмно-синий двубортный костюм ручной работы из тонкой итальянской шерсти.",
-      composition: "100% шерсть Super 150's",
-      color: "Тёмно-синий",
+      ),
+      ...compTri("100% шерсть Super 150's"),
+      ...colorTri("Тёмно-синий"),
       priceTjs: 55000,
       priceUsd: toUsd(55000),
       brandId: brioni.id,
@@ -164,12 +205,13 @@ async function main() {
 
   const greySuit = await prisma.product.create({
     data: {
-      name: "Костюм Zegna «Milano»",
+      ...nameTri("Костюм Zegna «Milano»"),
       slug: "zegna-milano-suit",
-      description:
+      ...descTri(
         "Светло-серый однобортный костюм из фирменной ткани High Performance.",
-      composition: "100% шерсть Zegna High Performance",
-      color: "Серый",
+      ),
+      ...compTri("100% шерсть Zegna High Performance"),
+      ...colorTri("Серый"),
       priceTjs: 38000,
       priceUsd: toUsd(38000),
       brandId: zegna.id,
@@ -197,12 +239,13 @@ async function main() {
 
   const oxfordShoes = await prisma.product.create({
     data: {
-      name: "Туфли-оксфорды Tom Ford «Elkan»",
+      ...nameTri("Туфли-оксфорды Tom Ford «Elkan»"),
       slug: "tom-ford-elkan-oxfords",
-      description:
+      ...descTri(
         "Чёрные оксфорды из телячьей кожи с зеркальной полировкой, ручная сборка.",
-      composition: "100% телячья кожа",
-      color: "Чёрный",
+      ),
+      ...compTri("100% телячья кожа"),
+      ...colorTri("Чёрный"),
       priceTjs: 18000,
       priceUsd: toUsd(18000),
       brandId: tomFord.id,
@@ -231,12 +274,11 @@ async function main() {
 
   const derbyShoes = await prisma.product.create({
     data: {
-      name: "Туфли-дерби Canali",
+      ...nameTri("Туфли-дерби Canali"),
       slug: "canali-derby-shoes",
-      description:
-        "Коричневые дерби из кожи с фактурой, удобная кожаная подошва.",
-      composition: "100% натуральная кожа",
-      color: "Коричневый",
+      ...descTri("Коричневые дерби из кожи с фактурой, удобная кожаная подошва."),
+      ...compTri("100% натуральная кожа"),
+      ...colorTri("Коричневый"),
       priceTjs: 14000,
       priceUsd: toUsd(14000),
       brandId: canali.id,
@@ -264,12 +306,13 @@ async function main() {
 
   const leatherBelt = await prisma.product.create({
     data: {
-      name: "Ремень Brioni из кожи аллигатора",
+      ...nameTri("Ремень Brioni из кожи аллигатора"),
       slug: "brioni-alligator-belt",
-      description:
+      ...descTri(
         "Чёрный ремень из кожи аллигатора с фирменной пряжкой из палладия.",
-      composition: "100% кожа аллигатора",
-      color: "Чёрный",
+      ),
+      ...compTri("100% кожа аллигатора"),
+      ...colorTri("Чёрный"),
       priceTjs: 12000,
       priceUsd: toUsd(12000),
       brandId: brioni.id,
@@ -297,12 +340,11 @@ async function main() {
 
   const silkTie = await prisma.product.create({
     data: {
-      name: "Галстук Zegna из шёлка",
+      ...nameTri("Галстук Zegna из шёлка"),
       slug: "zegna-silk-tie",
-      description:
-        "Тёмно-синий галстук из плотного шёлка жаккардового плетения.",
-      composition: "100% шёлк",
-      color: "Тёмно-синий",
+      ...descTri("Тёмно-синий галстук из плотного шёлка жаккардового плетения."),
+      ...compTri("100% шёлк"),
+      ...colorTri("Тёмно-синий"),
       priceTjs: 11500,
       priceUsd: toUsd(11500),
       brandId: zegna.id,
@@ -326,12 +368,13 @@ async function main() {
 
   const dressWatch = await prisma.product.create({
     data: {
-      name: "Часы Canali «Classic»",
+      ...nameTri("Часы Canali «Classic»"),
       slug: "canali-classic-watch",
-      description:
+      ...descTri(
         "Классические часы с корпусом из нержавеющей стали и кожаным ремешком.",
-      composition: "Нержавеющая сталь, сапфировое стекло, кожаный ремешок",
-      color: "Серебристый",
+      ),
+      ...compTri("Нержавеющая сталь, сапфировое стекло, кожаный ремешок"),
+      ...colorTri("Серебристый"),
       priceTjs: 25000,
       priceUsd: toUsd(25000),
       brandId: canali.id,
@@ -370,8 +413,8 @@ async function main() {
   await prisma.homepageSection.create({
     data: {
       sectionKey: "hero",
-      title: "Luxury Store",
-      subtitle: "Премиальный мужской бутик. Костюмы, обувь и аксессуары.",
+      ...titleTri("Luxury Store"),
+      ...subtitleTri("Премиальный мужской бутик. Костюмы, обувь и аксессуары."),
       imageUrl: "https://placehold.co/1920x1080?text=Luxury+Store+Hero",
       isActive: true,
     },

@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db/prisma";
  * POST /api/admin/brands
  *
  * Admin endpoint to create a brand. Requires `name` and `slug`.
- * Optional: `description`, `logoUrl`.
+ * Optional: `descriptionRu`, `descriptionTj`, `descriptionEn`, `logoUrl`.
  */
 export async function POST(request: Request) {
   try {
@@ -21,12 +21,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, slug, description, logoUrl } = (body ?? {}) as {
-      name?: unknown;
-      slug?: unknown;
-      description?: unknown;
-      logoUrl?: unknown;
-    };
+    const b = (body ?? {}) as Record<string, unknown>;
+    const { name, slug } = b;
 
     if (typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
@@ -45,8 +41,10 @@ export async function POST(request: Request) {
       data: {
         name: name.trim(),
         slug: slug.trim(),
-        description: typeof description === "string" ? description : null,
-        logoUrl: typeof logoUrl === "string" ? logoUrl : null,
+        descriptionRu: typeof b.descriptionRu === "string" ? b.descriptionRu : null,
+        descriptionTj: typeof b.descriptionTj === "string" ? b.descriptionTj : null,
+        descriptionEn: typeof b.descriptionEn === "string" ? b.descriptionEn : null,
+        logoUrl: typeof b.logoUrl === "string" ? b.logoUrl : null,
       },
     });
 

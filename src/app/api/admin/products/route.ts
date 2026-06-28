@@ -7,9 +7,10 @@ import { parseSizes, type SizeInput } from "@/lib/utils/product";
 /**
  * POST /api/admin/products
  *
- * Admin endpoint to create a product. Required: name, slug, priceTjs,
- * priceUsd, brandId, categoryId. Optional: description, composition, color,
- * isActive, isFeatured, isNew, and a nested `sizes` array.
+ * Admin endpoint to create a product. Required: nameRu, nameTj, nameEn, slug,
+ * priceTjs, priceUsd, brandId, categoryId. Optional: description{Ru,Tj,En},
+ * composition{Ru,Tj,En}, color{Ru,Tj,En}, isActive, isFeatured, isNew, and a
+ * nested `sizes` array.
  */
 export async function POST(request: Request) {
   try {
@@ -26,7 +27,14 @@ export async function POST(request: Request) {
     const b = (body ?? {}) as Record<string, unknown>;
 
     // Required string fields.
-    for (const field of ["name", "slug", "brandId", "categoryId"] as const) {
+    for (const field of [
+      "nameRu",
+      "nameTj",
+      "nameEn",
+      "slug",
+      "brandId",
+      "categoryId",
+    ] as const) {
       if (typeof b[field] !== "string" || !(b[field] as string).trim()) {
         return NextResponse.json(
           { success: false, message: `Field '${field}' is required.` },
@@ -59,15 +67,23 @@ export async function POST(request: Request) {
     }
 
     const data: Prisma.ProductUncheckedCreateInput = {
-      name: (b.name as string).trim(),
+      nameRu: (b.nameRu as string).trim(),
+      nameTj: (b.nameTj as string).trim(),
+      nameEn: (b.nameEn as string).trim(),
       slug: (b.slug as string).trim(),
       brandId: (b.brandId as string).trim(),
       categoryId: (b.categoryId as string).trim(),
       priceTjs: b.priceTjs as number,
       priceUsd: b.priceUsd as number,
-      description: typeof b.description === "string" ? b.description : null,
-      composition: typeof b.composition === "string" ? b.composition : null,
-      color: typeof b.color === "string" ? b.color : null,
+      descriptionRu: typeof b.descriptionRu === "string" ? b.descriptionRu : null,
+      descriptionTj: typeof b.descriptionTj === "string" ? b.descriptionTj : null,
+      descriptionEn: typeof b.descriptionEn === "string" ? b.descriptionEn : null,
+      compositionRu: typeof b.compositionRu === "string" ? b.compositionRu : null,
+      compositionTj: typeof b.compositionTj === "string" ? b.compositionTj : null,
+      compositionEn: typeof b.compositionEn === "string" ? b.compositionEn : null,
+      colorRu: typeof b.colorRu === "string" ? b.colorRu : null,
+      colorTj: typeof b.colorTj === "string" ? b.colorTj : null,
+      colorEn: typeof b.colorEn === "string" ? b.colorEn : null,
       ...(typeof b.isActive === "boolean" ? { isActive: b.isActive } : {}),
       ...(typeof b.isFeatured === "boolean" ? { isFeatured: b.isFeatured } : {}),
       ...(typeof b.isNew === "boolean" ? { isNew: b.isNew } : {}),

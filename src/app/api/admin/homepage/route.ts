@@ -7,8 +7,8 @@ import { prisma } from "@/lib/db/prisma";
  * PATCH /api/admin/homepage
  *
  * Admin endpoint to update a single homepage section. The target section is
- * identified by `id` or `sectionKey`. Updatable fields: `title`, `subtitle`,
- * `imageUrl`, `videoUrl`, `isActive`.
+ * identified by `id` or `sectionKey`. Updatable fields: `title{Ru,Tj,En}`,
+ * `subtitle{Ru,Tj,En}`, `imageUrl`, `videoUrl`, `isActive`.
  */
 export async function PATCH(request: Request) {
   try {
@@ -40,7 +40,16 @@ export async function PATCH(request: Request) {
     const data: Prisma.HomepageSectionUpdateInput = {};
 
     // Nullable text fields: a string sets the value, null clears it.
-    for (const field of ["title", "subtitle", "imageUrl", "videoUrl"] as const) {
+    for (const field of [
+      "titleRu",
+      "titleTj",
+      "titleEn",
+      "subtitleRu",
+      "subtitleTj",
+      "subtitleEn",
+      "imageUrl",
+      "videoUrl",
+    ] as const) {
       if (b[field] !== undefined) {
         if (b[field] === null) {
           data[field] = null;
