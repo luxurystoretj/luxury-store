@@ -22,8 +22,10 @@ const ALLOWED_TYPES: Record<string, string> = {
  * POST /api/admin/product-images
  *
  * Admin endpoint to upload a product image to Cloudflare R2 and persist the
- * resulting record. Expects multipart/form-data with `file`, `productId` and
- * an optional `sortOrder`.
+ * resulting record. Expects multipart/form-data with `file`, `productId`, an
+ * optional `sortOrder`, and optional trilingual alt text (`altRu`, `altTj`,
+ * `altEn`). The `blurDataURL` LQIP field is reserved in the schema but not
+ * populated by the backend for the MVP (see docs/updates.md).
  */
 export async function POST(request: Request) {
   try {
@@ -40,6 +42,11 @@ export async function POST(request: Request) {
     const file = formData.get("file");
     const productId = formData.get("productId");
     const sortOrderRaw = formData.get("sortOrder");
+
+    // Optional trilingual alt text.
+    const altRu = formData.get("altRu");
+    const altTj = formData.get("altTj");
+    const altEn = formData.get("altEn");
 
     if (!(file instanceof File)) {
       return NextResponse.json(
@@ -125,6 +132,9 @@ export async function POST(request: Request) {
         imageUrl,
         imageKey,
         sortOrder,
+        altRu: typeof altRu === "string" ? altRu : null,
+        altTj: typeof altTj === "string" ? altTj : null,
+        altEn: typeof altEn === "string" ? altEn : null,
       },
     });
 

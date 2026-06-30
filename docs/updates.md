@@ -16,6 +16,8 @@ when conflicts occur.
 
 **i18n: Trilingual column-based fields (RU/TJ/EN)** - All translatable text fields use three columns with `_ru`, `_tj`, `_en` suffixes instead of a single column (extends/overrides base spec sections 2.2–2.8). Affected fields: `Category.name` → `name_ru/tj/en` (required); `Brand.description` → `description_ru/tj/en` (optional, `Brand.name` stays single); `Product.name` → `name_ru/tj/en` (required), `Product.description` / `composition` / `color` → `*_ru/tj/en` (optional); `HomepageSection.title` / `subtitle` → `*_ru/tj/en` (optional). Prisma field names are camelCase (`nameRu`) mapped to snake_case columns (`name_ru`), so JSON API keys are camelCase. Public `GET /api/products`: `search` matches across `name_ru/tj/en` + `description_ru/tj/en`; `color` matches across `color_ru/tj/en`. List ordering that previously used `name` now uses `name_ru` (categories; `Brand.name` is unchanged so brands still order by `name`).
 
+**Images: LQIP reserved, trilingual alt text** - Per the frontend design system (DESIGN.md §8), the `ProductImage` model gains image-loading/accessibility fields. `blurDataURL` (`String?`, mapped `blur_data_url`) is **reserved in the schema but NOT populated by the backend** for the MVP — base64 LQIP generation (sharp/plaiceholder) is deferred; the API leaves it `null` and the frontend falls back to a flat skeleton. Alt text follows the trilingual convention: `altRu`, `altTj`, `altEn` (`String?`, mapped `alt_ru`/`alt_tj`/`alt_en`), accepted by `POST /api/admin/product-images` via multipart form fields. All four fields are optional so existing image rows remain valid.
+
 ---
 
 ## Known MVP Limitations
