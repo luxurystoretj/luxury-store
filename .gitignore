@@ -44,3 +44,10 @@ CLAUDE.md
 next-env.d.ts
 
 /src/generated/prisma
+
+# Personal Claude Code control files (local only, never commit)
+CLAUDE.md
+RULES.md
+TASKS.md
+TASKS_ARCHIVE.md
+DESIGN.md
