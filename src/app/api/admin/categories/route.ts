@@ -6,7 +6,8 @@ import { prisma } from "@/lib/db/prisma";
 /**
  * POST /api/admin/categories
  *
- * Admin endpoint to create a category. Requires `name` and `slug`.
+ * Admin endpoint to create a category. Requires `nameRu`, `nameTj`, `nameEn`
+ * and `slug`.
  */
 export async function POST(request: Request) {
   try {
@@ -20,26 +21,24 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, slug } = (body ?? {}) as {
-      name?: unknown;
-      slug?: unknown;
-    };
+    const b = (body ?? {}) as Record<string, unknown>;
 
-    if (typeof name !== "string" || !name.trim()) {
-      return NextResponse.json(
-        { success: false, message: "Field 'name' is required." },
-        { status: 400 },
-      );
-    }
-    if (typeof slug !== "string" || !slug.trim()) {
-      return NextResponse.json(
-        { success: false, message: "Field 'slug' is required." },
-        { status: 400 },
-      );
+    for (const field of ["nameRu", "nameTj", "nameEn", "slug"] as const) {
+      if (typeof b[field] !== "string" || !(b[field] as string).trim()) {
+        return NextResponse.json(
+          { success: false, message: `Field '${field}' is required.` },
+          { status: 400 },
+        );
+      }
     }
 
     const category = await prisma.category.create({
-      data: { name: name.trim(), slug: slug.trim() },
+      data: {
+        nameRu: (b.nameRu as string).trim(),
+        nameTj: (b.nameTj as string).trim(),
+        nameEn: (b.nameEn as string).trim(),
+        slug: (b.slug as string).trim(),
+      },
     });
 
     return NextResponse.json({ success: true, data: category }, { status: 201 });

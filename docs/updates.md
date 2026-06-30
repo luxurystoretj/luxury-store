@@ -14,6 +14,8 @@ when conflicts occur.
 
 **File Storage: Cloudflare R2** - Product images are stored in Cloudflare R2 (S3-compatible) per base spec section 5.2, accessed via the `@aws-sdk/client-s3` package. The `ProductImage` model gains an optional `image_key` column (`imageKey String?`) that stores the R2 object key so images can be deleted from the bucket later (the column is optional so existing seeded image rows remain valid). Required env variables (extends base spec section 5.4): `S3_BUCKET`, `S3_KEY`, `S3_SECRET`, `R2_ENDPOINT` (account R2 endpoint URL), `R2_PUBLIC_URL` (public base URL used to build the stored image URL).
 
+**i18n: Trilingual column-based fields (RU/TJ/EN)** - All translatable text fields use three columns with `_ru`, `_tj`, `_en` suffixes instead of a single column (extends/overrides base spec sections 2.2–2.8). Affected fields: `Category.name` → `name_ru/tj/en` (required); `Brand.description` → `description_ru/tj/en` (optional, `Brand.name` stays single); `Product.name` → `name_ru/tj/en` (required), `Product.description` / `composition` / `color` → `*_ru/tj/en` (optional); `HomepageSection.title` / `subtitle` → `*_ru/tj/en` (optional). Prisma field names are camelCase (`nameRu`) mapped to snake_case columns (`name_ru`), so JSON API keys are camelCase. Public `GET /api/products`: `search` matches across `name_ru/tj/en` + `description_ru/tj/en`; `color` matches across `color_ru/tj/en`. List ordering that previously used `name` now uses `name_ru` (categories; `Brand.name` is unchanged so brands still order by `name`).
+
 ---
 
 ## Known MVP Limitations

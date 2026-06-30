@@ -31,7 +31,14 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     const data: Prisma.ProductUncheckedUpdateInput = {};
 
     // Optional string fields (must be non-empty when present).
-    for (const field of ["name", "slug", "brandId", "categoryId"] as const) {
+    for (const field of [
+      "nameRu",
+      "nameTj",
+      "nameEn",
+      "slug",
+      "brandId",
+      "categoryId",
+    ] as const) {
       if (b[field] !== undefined) {
         if (typeof b[field] !== "string" || !(b[field] as string).trim()) {
           return NextResponse.json(
@@ -56,15 +63,21 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       }
     }
 
-    // Optional nullable text fields.
-    if (b.description !== undefined) {
-      data.description = typeof b.description === "string" ? b.description : null;
-    }
-    if (b.composition !== undefined) {
-      data.composition = typeof b.composition === "string" ? b.composition : null;
-    }
-    if (b.color !== undefined) {
-      data.color = typeof b.color === "string" ? b.color : null;
+    // Optional nullable trilingual text fields.
+    for (const field of [
+      "descriptionRu",
+      "descriptionTj",
+      "descriptionEn",
+      "compositionRu",
+      "compositionTj",
+      "compositionEn",
+      "colorRu",
+      "colorTj",
+      "colorEn",
+    ] as const) {
+      if (b[field] !== undefined) {
+        data[field] = typeof b[field] === "string" ? (b[field] as string) : null;
+      }
     }
 
     // Optional boolean flags.

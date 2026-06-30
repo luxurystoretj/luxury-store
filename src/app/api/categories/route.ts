@@ -5,12 +5,12 @@ import { prisma } from "@/lib/db/prisma";
 /**
  * GET /api/categories
  *
- * Public endpoint returning all categories ordered by name (A-Z).
+ * Public endpoint returning all categories ordered by Russian name (A-Z).
  */
 export async function GET() {
   try {
     const categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
+      orderBy: { nameRu: "asc" },
     });
 
     return NextResponse.json({ success: true, data: categories });
