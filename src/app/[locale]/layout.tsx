@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, PT_Sans } from "next/font/google";
-import "./globals.css";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import "../globals.css";
 
 // DESIGN.md §2: display font, weights 400/500 only, no italic, no bold (700).
 const cormorantGaramond = Cormorant_Garamond({
@@ -30,17 +34,31 @@ export const metadata: Metadata = {
     "Премиальный мужской бутик. Каталог, бренды, эксклюзивные образы.",
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  // Enable static rendering for this locale segment.
+  setRequestLocale(locale);
+
   return (
-    <html lang="ru">
+    <html lang={locale}>
       <body
         className={`${cormorantGaramond.variable} ${inter.variable} ${ptSans.variable} antialiased`}
       >
-        {children}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
