@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import "../globals.css";
 
 // DESIGN.md §2: display font, weights 400/500 only, no italic, no bold (700).
@@ -58,7 +60,13 @@ export default async function LocaleLayout({
       <body
         className={`${cormorantGaramond.variable} ${inter.variable} ${ptSans.variable} antialiased`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <div className="flex min-h-dvh flex-col">
+            <Header />
+            {children}
+            <Footer />
+          </div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

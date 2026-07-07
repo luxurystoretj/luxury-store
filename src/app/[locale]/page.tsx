@@ -15,7 +15,7 @@ export default function Home({
   const t = useTranslations("HomePage");
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
       <h1 className="font-display text-4xl">{t("title")}</h1>
       <p className="max-w-md">{t("tagline")}</p>
     </main>

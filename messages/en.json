@@ -5,5 +5,23 @@
   },
   "ProductImage": {
     "error": "Image failed to load"
+  },
+  "Nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "brands": "Brands",
+    "contacts": "Contacts",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu"
+  },
+  "Footer": {
+    "cities": "Khujand · Dushanbe",
+    "phone": "+992 00 000 00 00",
+    "email": "hello@luxurystore.tj",
+    "rights": "© 2026 Luxury Store. All rights reserved."
+  },
+  "LocaleSwitcher": {
+    "label": "Switch language"
   }
 }
