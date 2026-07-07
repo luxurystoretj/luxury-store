@@ -5,6 +5,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { UIIcon } from "@/components/ui/ui-icon"
 
 // Base UI Select parts (Root/Trigger/Value/Icon/Portal/Positioner/Popup/Item/ItemText/
 // ItemIndicator/GroupLabel/Separator) restyled to DESIGN §7. Trigger reads as an Input
@@ -13,7 +14,6 @@ import { cn } from "@/lib/utils"
 // via Base UI's data-[starting-style]/[ending-style] transitions. Item highlight = surface;
 // selected = accent text + weight 500. Boolean states are present-when-true → matched with
 // bracketed presence selectors (data-[highlighted], data-[selected], data-[disabled]).
-// Icons use lucide directly for now — TODO(T2.4): swap to <UIIcon>.
 
 function Select(props: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
@@ -43,7 +43,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon className="flex text-[var(--secondary)]">
-        <ChevronDownIcon size={16} strokeWidth={2} aria-hidden />
+        <UIIcon icon={ChevronDownIcon} size={16} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -93,12 +93,7 @@ function SelectItem({
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <span className="absolute right-2 flex items-center">
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon
-            size={16}
-            strokeWidth={2}
-            className="text-[var(--accent)]"
-            aria-hidden
-          />
+          <UIIcon icon={CheckIcon} size={16} className="text-[var(--accent)]" />
         </SelectPrimitive.ItemIndicator>
       </span>
     </SelectPrimitive.Item>

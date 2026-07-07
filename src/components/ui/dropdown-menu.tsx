@@ -5,6 +5,7 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { UIIcon } from "@/components/ui/ui-icon"
 
 // Base UI Menu parts (Root/Trigger/Portal/Positioner/Popup/Item/CheckboxItem/RadioGroup/
 // RadioItem/GroupLabel/Separator) restyled to DESIGN §7 dropdown table. Popup: opaque bg,
@@ -95,12 +96,7 @@ function DropdownMenuCheckboxItem({
     >
       <span className="absolute left-2 flex items-center">
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon
-            size={16}
-            strokeWidth={2}
-            className="text-[var(--accent)]"
-            aria-hidden
-          />
+          <UIIcon icon={CheckIcon} size={16} className="text-[var(--accent)]" />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -121,12 +117,7 @@ function DropdownMenuRadioItem({
     >
       <span className="absolute left-2 flex items-center">
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon
-            size={16}
-            strokeWidth={2}
-            className="text-[var(--accent)]"
-            aria-hidden
-          />
+          <UIIcon icon={CheckIcon} size={16} className="text-[var(--accent)]" />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

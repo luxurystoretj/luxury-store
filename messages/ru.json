@@ -2,5 +2,26 @@
   "HomePage": {
     "title": "Luxury Store",
     "tagline": "Премиальный мужской бутик. Каталог, бренды, эксклюзивные образы."
+  },
+  "ProductImage": {
+    "error": "Изображение не загружено"
+  },
+  "Nav": {
+    "home": "Главная",
+    "catalog": "Каталог",
+    "brands": "Бренды",
+    "contacts": "Контакты",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
+    "menu": "Меню"
+  },
+  "Footer": {
+    "cities": "Худжанд · Душанбе",
+    "phone": "+992 00 000 00 00",
+    "email": "hello@luxurystore.tj",
+    "rights": "© 2026 Luxury Store. Все права защищены."
+  },
+  "LocaleSwitcher": {
+    "label": "Переключить язык"
   }
 }

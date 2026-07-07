@@ -5,6 +5,7 @@ import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { UIIcon } from "@/components/ui/ui-icon"
 
 // Base UI Dialog parts used as a side sheet (base-nova convention). Motion per DESIGN §10
 // (owner-added "Sheet panel" row): panel = transform (translateX/Y from the anchored edge) +
@@ -80,7 +81,7 @@ function SheetContent({
             aria-label={closeLabel}
             className="absolute top-4 right-4 inline-flex size-8 items-center justify-center rounded-none text-foreground outline-none transition-colors duration-150 ease-out hover:text-[var(--accent)] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <XIcon size={16} strokeWidth={2} aria-hidden />
+            <UIIcon icon={XIcon} size={16} />
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>
