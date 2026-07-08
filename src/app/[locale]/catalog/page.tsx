@@ -5,6 +5,7 @@ import { CatalogGridSlot } from "@/components/catalog/catalog-grid-slot"
 import { FilterToolbar } from "@/components/catalog/filter-toolbar"
 import { MobileFilterSheet } from "@/components/catalog/mobile-filter-sheet"
 import { ProductGrid } from "@/components/catalog/product-grid"
+import { SearchInput } from "@/components/catalog/search-input"
 import { SortControl } from "@/components/catalog/sort-control"
 import { getBrands } from "@/features/brands/api"
 import { getCategories } from "@/features/categories/api"
@@ -45,6 +46,9 @@ export default async function CatalogPage({ params, searchParams }: CatalogPageP
     <Container className="py-8 md:py-12">
       <CatalogParamsProvider>
         <h1 className="mb-8 font-display text-3xl">{t("title")}</h1>
+        <div className="mb-6">
+          <SearchInput />
+        </div>
         <FilterToolbar brands={brands} categories={categories} sizes={sizes} />
         <div className="mb-6 flex items-center gap-3">
           <MobileFilterSheet brands={brands} categories={categories} sizes={sizes} />

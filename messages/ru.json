@@ -48,6 +48,9 @@
       "allCategories": "Все категории",
       "reset": "Сбросить",
       "showResults": "Показать результаты"
+    },
+    "search": {
+      "placeholder": "Поиск товаров..."
     }
   }
 }

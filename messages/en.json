@@ -48,6 +48,9 @@
       "allCategories": "All categories",
       "reset": "Reset",
       "showResults": "Show results"
+    },
+    "search": {
+      "placeholder": "Search products..."
     }
   }
 }
