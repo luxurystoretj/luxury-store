@@ -36,6 +36,18 @@
       "title": "No products found",
       "description": "Try adjusting your filters or search.",
       "clear": "Clear all filters"
+    },
+    "filters": {
+      "title": "Filters",
+      "button": "Filters",
+      "brand": "Brand",
+      "category": "Category",
+      "color": "Color",
+      "size": "Size",
+      "allBrands": "All brands",
+      "allCategories": "All categories",
+      "reset": "Reset",
+      "showResults": "Show results"
     }
   }
 }
