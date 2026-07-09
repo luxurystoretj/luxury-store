@@ -52,5 +52,14 @@
     "search": {
       "placeholder": "Поиск товаров..."
     }
+  },
+  "Product": {
+    "description": "Описание",
+    "composition": "Состав",
+    "color": "Цвет",
+    "size": "Размер",
+    "gallery": {
+      "viewImage": "Показать фото {number}"
+    }
   }
 }

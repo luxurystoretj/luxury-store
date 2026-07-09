@@ -52,5 +52,14 @@
     "search": {
       "placeholder": "Search products..."
     }
+  },
+  "Product": {
+    "description": "Description",
+    "composition": "Composition",
+    "color": "Color",
+    "size": "Size",
+    "gallery": {
+      "viewImage": "View photo {number}"
+    }
   }
 }
