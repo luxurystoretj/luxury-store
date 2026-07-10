@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
@@ -5,12 +6,36 @@ import { Container } from "@/components/layout/container"
 import { ProductAttributes } from "@/components/product-detail/product-attributes"
 import { ProductGallery } from "@/components/product-detail/product-gallery"
 import { ProductSizes } from "@/components/product-detail/product-sizes"
+import { RelatedProducts } from "@/components/product-detail/related-products"
 import { getProductBySlug } from "@/features/products/api"
 import { pickLocale, type Locale } from "@/lib/locale"
 import { formatPrice } from "@/lib/price"
 
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { locale, slug } = await params
+  const product = await getProductBySlug(slug)
+  if (!product) notFound()
+
+  const localeTyped = locale as Locale
+  const name = pickLocale(localeTyped, {
+    ru: product.nameRu,
+    tj: product.nameTj,
+    en: product.nameEn,
+  })
+  const description = pickLocale(localeTyped, {
+    ru: product.descriptionRu,
+    tj: product.descriptionTj,
+    en: product.descriptionEn,
+  })
+
+  return {
+    title: `${name} — ${product.brand.name} | Luxury Store`,
+    ...(description ? { description } : {}),
+  }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -76,6 +101,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductSizes sizes={product.sizes} />
         </div>
       </div>
+      <RelatedProducts relatedFrom={product.relatedFrom} locale={localeTyped} />
     </Container>
   )
 }
