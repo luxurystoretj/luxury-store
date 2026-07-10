@@ -52,5 +52,17 @@
     "search": {
       "placeholder": "Search products..."
     }
+  },
+  "Product": {
+    "description": "Description",
+    "composition": "Composition",
+    "color": "Color",
+    "size": "Size",
+    "related": {
+      "heading": "Goes well with"
+    },
+    "gallery": {
+      "viewImage": "View photo {number}"
+    }
   }
 }
