@@ -35,6 +35,10 @@
   "LocaleSwitcher": {
     "label": "Switch language"
   },
+  "Brands": {
+    "title": "Brands",
+    "empty": "Brands coming soon"
+  },
   "Catalog": {
     "title": "Catalog",
     "sort": {

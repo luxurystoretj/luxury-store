@@ -35,6 +35,10 @@
   "LocaleSwitcher": {
     "label": "Переключить язык"
   },
+  "Brands": {
+    "title": "Бренды",
+    "empty": "Бренды скоро появятся"
+  },
   "Catalog": {
     "title": "Каталог",
     "sort": {
