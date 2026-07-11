@@ -3,6 +3,17 @@
     "title": "Luxury Store",
     "tagline": "Премиальный мужской бутик. Каталог, бренды, эксклюзивные образы."
   },
+  "Home": {
+    "newArrivals": {
+      "heading": "Новинки"
+    },
+    "featured": {
+      "heading": "Рекомендуем"
+    },
+    "contactsTeaser": {
+      "cta": "Смотреть контакты"
+    }
+  },
   "ProductImage": {
     "error": "Изображение не загружено"
   },

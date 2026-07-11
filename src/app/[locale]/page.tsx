@@ -1,23 +1,35 @@
-import { use } from "react";
-import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server"
 
-export default function Home({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = use(params);
-  // Enable static rendering for this page (Next.js renders pages and layouts
-  // independently, so setRequestLocale is needed here too).
-  setRequestLocale(locale);
+import { Container } from "@/components/layout/container"
+import { AboutSection } from "@/features/homepage/components/about-section"
+import { ContactsTeaserSection } from "@/features/homepage/components/contacts-teaser-section"
+import { FeaturedSection } from "@/features/homepage/components/featured-section"
+import { Hero } from "@/features/homepage/components/hero"
+import { NewArrivalsSection } from "@/features/homepage/components/new-arrivals-section"
+import { getHomepageSections } from "@/features/homepage/api"
+import { getProducts } from "@/features/products/api"
+import type { Locale } from "@/lib/locale"
 
-  const t = useTranslations("HomePage");
+interface HomePageProps {
+  params: Promise<{ locale: string }>
+}
+
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const localeTyped = locale as Locale
+
+  const [sections, products] = await Promise.all([getHomepageSections(), getProducts()])
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-      <h1 className="font-display text-4xl">{t("title")}</h1>
-      <p className="max-w-md">{t("tagline")}</p>
-    </main>
-  );
+    <Container className="py-16 md:py-24 lg:py-32">
+      <div className="flex flex-col gap-16 md:gap-24 lg:gap-32">
+        <Hero sections={sections} locale={localeTyped} />
+        <NewArrivalsSection products={products} locale={localeTyped} />
+        <FeaturedSection products={products} locale={localeTyped} />
+        <AboutSection sections={sections} locale={localeTyped} />
+        <ContactsTeaserSection sections={sections} locale={localeTyped} />
+      </div>
+    </Container>
+  )
 }

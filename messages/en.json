@@ -3,6 +3,17 @@
     "title": "Luxury Store",
     "tagline": "A premium menswear boutique. Catalogue, brands, exclusive looks."
   },
+  "Home": {
+    "newArrivals": {
+      "heading": "New Arrivals"
+    },
+    "featured": {
+      "heading": "Featured"
+    },
+    "contactsTeaser": {
+      "cta": "See contacts"
+    }
+  },
   "ProductImage": {
     "error": "Image failed to load"
   },
