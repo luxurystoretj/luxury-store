@@ -68,6 +68,38 @@
       "placeholder": "Search products..."
     }
   },
+  "Contacts": {
+    "title": "Contacts",
+    "address": {
+      "label": "Address",
+      "value": "1 Rudaki St, Dushanbe"
+    },
+    "phone": {
+      "label": "Phone",
+      "value": "+992 00 000 00 00"
+    },
+    "email": {
+      "label": "Email",
+      "value": "hello@luxurystore.tj"
+    },
+    "hours": {
+      "label": "Opening hours",
+      "value": "Mon–Sat: 10:00–20:00"
+    },
+    "socials": {
+      "heading": "Follow us",
+      "instagram": "Instagram: @luxurystore.tj",
+      "telegram": "Telegram: @luxurystore_tj"
+    },
+    "map": {
+      "caption": "Map coming soon"
+    }
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "This page doesn't exist or has been moved.",
+    "cta": "Back to catalog"
+  },
   "Product": {
     "description": "Description",
     "composition": "Composition",
