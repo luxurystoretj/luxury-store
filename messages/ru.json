@@ -3,6 +3,17 @@
     "title": "Luxury Store",
     "tagline": "Премиальный мужской бутик. Каталог, бренды, эксклюзивные образы."
   },
+  "Home": {
+    "newArrivals": {
+      "heading": "Новинки"
+    },
+    "featured": {
+      "heading": "Рекомендуем"
+    },
+    "contactsTeaser": {
+      "cta": "Смотреть контакты"
+    }
+  },
   "ProductImage": {
     "error": "Изображение не загружено"
   },
@@ -23,6 +34,10 @@
   },
   "LocaleSwitcher": {
     "label": "Переключить язык"
+  },
+  "Brands": {
+    "title": "Бренды",
+    "empty": "Бренды скоро появятся"
   },
   "Catalog": {
     "title": "Каталог",
@@ -52,6 +67,38 @@
     "search": {
       "placeholder": "Поиск товаров..."
     }
+  },
+  "Contacts": {
+    "title": "Контакты",
+    "address": {
+      "label": "Адрес",
+      "value": "г. Душанбе, ул. Рудаки, 1"
+    },
+    "phone": {
+      "label": "Телефон",
+      "value": "+992 00 000 00 00"
+    },
+    "email": {
+      "label": "Email",
+      "value": "hello@luxurystore.tj"
+    },
+    "hours": {
+      "label": "Часы работы",
+      "value": "Пн–Сб: 10:00–20:00"
+    },
+    "socials": {
+      "heading": "Мы в соцсетях",
+      "instagram": "Instagram: @luxurystore.tj",
+      "telegram": "Telegram: @luxurystore_tj"
+    },
+    "map": {
+      "caption": "Карта появится позже"
+    }
+  },
+  "NotFound": {
+    "title": "Страница не найдена",
+    "description": "Такой страницы не существует или она была перемещена.",
+    "cta": "Вернуться в каталог"
   },
   "Product": {
     "description": "Описание",
