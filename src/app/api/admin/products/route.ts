@@ -5,6 +5,100 @@ import { prisma } from "@/lib/db/prisma";
 import { parseSizes, type SizeInput } from "@/lib/utils/product";
 
 /**
+ * GET /api/admin/products
+ *
+ * Admin listing: returns ALL products (no `isActive` filter — the owner must
+ * see hidden/soft-deleted rows). Supports the same query params as the public
+ * route (search, brand, category, color, size, sort), only without forcing
+ * `isActive`. Includes brand, category, all sizes, and images.
+ */
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+
+    const search = searchParams.get("search")?.trim();
+    const brand = searchParams.get("brand")?.trim();
+    const category = searchParams.get("category")?.trim();
+    const color = searchParams.get("color")?.trim();
+    const size = searchParams.get("size")?.trim();
+    const sort = searchParams.get("sort")?.trim();
+
+    const where: Prisma.ProductWhereInput = {};
+    const and: Prisma.ProductWhereInput[] = [];
+
+    if (search) {
+      and.push({
+        OR: [
+          { nameRu: { contains: search, mode: "insensitive" } },
+          { nameTj: { contains: search, mode: "insensitive" } },
+          { nameEn: { contains: search, mode: "insensitive" } },
+          { descriptionRu: { contains: search, mode: "insensitive" } },
+          { descriptionTj: { contains: search, mode: "insensitive" } },
+          { descriptionEn: { contains: search, mode: "insensitive" } },
+        ],
+      });
+    }
+
+    if (color) {
+      and.push({
+        OR: [
+          { colorRu: { contains: color, mode: "insensitive" } },
+          { colorTj: { contains: color, mode: "insensitive" } },
+          { colorEn: { contains: color, mode: "insensitive" } },
+        ],
+      });
+    }
+
+    if (and.length > 0) {
+      where.AND = and;
+    }
+
+    if (brand) {
+      where.brand = { is: { OR: [{ id: brand }, { slug: brand }] } };
+    }
+    if (category) {
+      where.category = { is: { OR: [{ id: category }, { slug: category }] } };
+    }
+    if (size) {
+      where.sizes = { some: { size, quantity: { gt: 0 } } };
+    }
+
+    let orderBy: Prisma.ProductOrderByWithRelationInput;
+    switch (sort) {
+      case "price_asc":
+        orderBy = { priceTjs: "asc" };
+        break;
+      case "price_desc":
+        orderBy = { priceTjs: "desc" };
+        break;
+      case "new":
+      default:
+        orderBy = { createdAt: "desc" };
+        break;
+    }
+
+    const products = await prisma.product.findMany({
+      where,
+      orderBy,
+      include: {
+        brand: true,
+        category: true,
+        sizes: true,
+        images: { orderBy: { sortOrder: "asc" } },
+      },
+    });
+
+    return NextResponse.json({ success: true, data: products });
+  } catch (error) {
+    console.error("GET /api/admin/products failed:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch products." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
  * POST /api/admin/products
  *
  * Admin endpoint to create a product. Required: nameRu, nameTj, nameEn, slug,

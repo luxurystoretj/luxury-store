@@ -18,6 +18,15 @@ when conflicts occur.
 
 **Images: LQIP reserved, trilingual alt text** - Per the frontend design system (DESIGN.md §8), the `ProductImage` model gains image-loading/accessibility fields. `blurDataURL` (`String?`, mapped `blur_data_url`) is **reserved in the schema but NOT populated by the backend** for the MVP — base64 LQIP generation (sharp/plaiceholder) is deferred; the API leaves it `null` and the frontend falls back to a flat skeleton. Alt text follows the trilingual convention: `altRu`, `altTj`, `altEn` (`String?`, mapped `alt_ru`/`alt_tj`/`alt_en`), accepted by `POST /api/admin/product-images` via multipart form fields. All four fields are optional so existing image rows remain valid.
 
+**API Contract: Admin GET (read) endpoints** - Extends base spec section 3.3 (which listed only POST/PATCH/DELETE for admin). The admin management UI needs to read data the public endpoints hide (soft-deleted/inactive rows) and address products by `id`. Added, all under `/api/admin/*` and therefore protected by `src/middleware.ts`, all returning the standard `{ success, data }` envelope:
+- `GET /api/admin/products` — ALL products (no `isActive` filter). Supports the same query params as the public route (`search`, `brand`, `category`, `color`, `size`, `sort`) minus the forced `isActive`. Includes `brand`, `category`, all `sizes`, and `images`.
+- `GET /api/admin/products/:id` — single product by `id` (no `isActive` filter), including `brand`, `category`, all `sizes`, `images`, and `relatedFrom` → `relatedProduct`. 404 if not found.
+- `GET /api/admin/homepage` — ALL homepage sections (no `isActive` filter), so inactive sections can be edited.
+- `GET /api/admin/brands` — all brands ordered by `name` (Brand keeps a single-language `name`), with `_count.products`.
+- `GET /api/admin/categories` — all categories ordered by `nameRu`, with `_count.products`.
+
+**Content: fixed homepage sections seeded** - The homepage renders blocks keyed by `sectionKey`: `hero`, `about`, `contacts` (New Arrivals / Featured are driven by product flags `isNew` / `isFeatured`, not sections). `prisma/seed.ts` now creates all three `HomepageSection` rows so the blocks have content to render and the admin homepage PATCH (which updates existing sections by `id`/`sectionKey`) has rows to target. There is no admin CREATE for homepage sections — the section set is fixed.
+
 ---
 
 ## Known MVP Limitations

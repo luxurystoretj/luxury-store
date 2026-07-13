@@ -4,6 +4,29 @@ import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db/prisma";
 
 /**
+ * GET /api/admin/brands
+ *
+ * Admin listing of all brands, ordered by name, with a product count to help
+ * the admin dashboard/tables. (Brand keeps a single-language `name`.)
+ */
+export async function GET() {
+  try {
+    const brands = await prisma.brand.findMany({
+      orderBy: { name: "asc" },
+      include: { _count: { select: { products: true } } },
+    });
+
+    return NextResponse.json({ success: true, data: brands });
+  } catch (error) {
+    console.error("GET /api/admin/brands failed:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch brands." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
  * POST /api/admin/brands
  *
  * Admin endpoint to create a brand. Requires `name` and `slug`.

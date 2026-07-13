@@ -7,6 +7,63 @@ import { parseSizes, type SizeInput } from "@/lib/utils/product";
 type RouteContext = { params: Promise<{ id: string }> };
 
 /**
+ * GET /api/admin/products/[id]
+ *
+ * Admin fetch of a single product by `id`, regardless of `isActive` (the owner
+ * edits hidden products too). Includes brand, category, all sizes, images, and
+ * related products ("Сочетается с этим").
+ */
+export async function GET(_request: Request, { params }: RouteContext) {
+  try {
+    const { id } = await params;
+
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        brand: true,
+        category: true,
+        sizes: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        relatedFrom: {
+          include: {
+            relatedProduct: {
+              select: {
+                id: true,
+                nameRu: true,
+                nameTj: true,
+                nameEn: true,
+                slug: true,
+                priceTjs: true,
+                priceUsd: true,
+                images: {
+                  orderBy: { sortOrder: "asc" },
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      return NextResponse.json(
+        { success: false, message: "Product not found." },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ success: true, data: product });
+  } catch (error) {
+    console.error("GET /api/admin/products/[id] failed:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch product." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
  * PATCH /api/admin/products/[id]
  *
  * Admin endpoint for partial product updates. Any subset of the core fields

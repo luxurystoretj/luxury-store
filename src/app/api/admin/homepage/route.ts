@@ -4,6 +4,28 @@ import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db/prisma";
 
 /**
+ * GET /api/admin/homepage
+ *
+ * Admin listing of ALL homepage sections (no `isActive` filter), so inactive
+ * sections can still be managed. Ordered by sectionKey for a stable list.
+ */
+export async function GET() {
+  try {
+    const sections = await prisma.homepageSection.findMany({
+      orderBy: { sectionKey: "asc" },
+    });
+
+    return NextResponse.json({ success: true, data: sections });
+  } catch (error) {
+    console.error("GET /api/admin/homepage failed:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch homepage sections." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
  * PATCH /api/admin/homepage
  *
  * Admin endpoint to update a single homepage section. The target section is

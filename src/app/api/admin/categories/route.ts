@@ -4,6 +4,29 @@ import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db/prisma";
 
 /**
+ * GET /api/admin/categories
+ *
+ * Admin listing of all categories, ordered by Russian name, with a product
+ * count to help the admin dashboard/tables.
+ */
+export async function GET() {
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: { nameRu: "asc" },
+      include: { _count: { select: { products: true } } },
+    });
+
+    return NextResponse.json({ success: true, data: categories });
+  } catch (error) {
+    console.error("GET /api/admin/categories failed:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch categories." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
  * POST /api/admin/categories
  *
  * Admin endpoint to create a category. Requires `nameRu`, `nameTj`, `nameEn`

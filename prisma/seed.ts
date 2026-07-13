@@ -409,13 +409,38 @@ async function main() {
     ],
   });
 
-  // --- Homepage section -----------------------------------------------------
+  // --- Homepage sections ----------------------------------------------------
+  // Fixed set of sections keyed by sectionKey (hero, about, contacts). The
+  // homepage renders each block by key; New Arrivals / Featured are driven by
+  // product flags, not sections.
   await prisma.homepageSection.create({
     data: {
       sectionKey: "hero",
       ...titleTri("Luxury Store"),
       ...subtitleTri("Премиальный мужской бутик. Костюмы, обувь и аксессуары."),
       imageUrl: "https://placehold.co/1920x1080?text=Luxury+Store+Hero",
+      isActive: true,
+    },
+  });
+
+  await prisma.homepageSection.create({
+    data: {
+      sectionKey: "about",
+      ...titleTri("О бренде"),
+      ...subtitleTri(
+        "Мы собираем лучшие мужские костюмы и аксессуары от премиальных итальянских домов моды.",
+      ),
+      imageUrl: "https://placehold.co/1200x800?text=About+Brand",
+      isActive: true,
+    },
+  });
+
+  await prisma.homepageSection.create({
+    data: {
+      sectionKey: "contacts",
+      ...titleTri("Контакты"),
+      ...subtitleTri("Душанбе, проспект Рудаки 123. Ежедневно с 10:00 до 21:00."),
+      imageUrl: "https://placehold.co/1200x800?text=Contacts",
       isActive: true,
     },
   });
