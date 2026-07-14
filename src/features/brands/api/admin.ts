@@ -12,13 +12,10 @@ export interface BrandPayload {
   logoUrl: string | null;
 }
 
-// Admin fetchers hit /api/admin/*, unfiltered and always-fresh (no revalidate caching,
-// unlike the public getBrands()). No adminGetBrand(id) — the singular admin route only
-// exports PATCH/DELETE, confirmed against src/app/api/admin/brands/[id]/route.ts — the edit
-// page finds its record from this list instead.
-export function adminGetBrands(): Promise<BrandWithCount[]> {
-  return apiFetch<BrandWithCount[]>("/api/admin/brands", { cache: "no-store" });
-}
+// GET fetchers live in ./admin-list.ts (server-only — they need to forward the admin_token
+// cookie, which only works via next/headers). This file holds the mutation functions, which
+// run client-side from *-table.tsx/*-form.tsx and rely on the browser's own automatic
+// same-origin cookie forwarding, so they stay plain apiFetch with no special handling.
 
 export function adminCreateBrand(
   payload: Pick<BrandPayload, "name" | "slug"> & Partial<BrandPayload>,

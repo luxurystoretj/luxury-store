@@ -30,17 +30,11 @@ export interface ProductPayload {
   sizes: SizePayload[];
 }
 
-// Admin fetchers hit /api/admin/*, unfiltered and always-fresh (no revalidate caching,
-// unlike the public getProducts()). Unlike brands/categories, a singular admin GET does
-// exist here (GET /api/admin/products/:id), confirmed against
-// src/app/api/admin/products/[id]/route.ts — used directly by the edit page.
-export function adminGetProducts(): Promise<Product[]> {
-  return apiFetch<Product[]>("/api/admin/products", { cache: "no-store" });
-}
-
-export function adminGetProduct(id: string): Promise<Product> {
-  return apiFetch<Product>(`/api/admin/products/${id}`, { cache: "no-store" });
-}
+// GET fetchers live in ./admin-list.ts (server-only — they need to forward the admin_token
+// cookie, which only works via next/headers). This file holds the mutation functions, which
+// run client-side from products-table.tsx/product-form.tsx and rely on the browser's own
+// automatic same-origin cookie forwarding, so they stay plain apiFetch with no special
+// handling.
 
 export function adminCreateProduct(payload: ProductPayload): Promise<Product> {
   return apiFetch<Product>("/api/admin/products", {

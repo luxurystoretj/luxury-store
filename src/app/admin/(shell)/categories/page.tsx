@@ -1,4 +1,4 @@
-import { adminGetCategories } from "@/features/categories/api/admin";
+import { adminGetCategories } from "@/features/categories/api/admin-list";
 import { CategoriesTable } from "@/features/categories/components/categories-table";
 
 export default async function AdminCategoriesPage() {

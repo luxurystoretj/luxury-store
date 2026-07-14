@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
 import { getBrands } from "@/features/brands/api";
 import { getCategories } from "@/features/categories/api";
-import { adminGetProduct } from "@/features/products/api/admin";
+import { adminGetProduct } from "@/features/products/api/admin-list";
 import { ProductForm } from "@/features/products/components/product-form";
 
 type PageProps = { params: Promise<{ id: string }> };

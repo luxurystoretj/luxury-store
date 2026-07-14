@@ -10,15 +10,10 @@ export interface CategoryPayload {
   slug: string;
 }
 
-// Admin fetchers hit /api/admin/*, unfiltered and always-fresh (no revalidate caching,
-// unlike the public getCategories()). No adminGetCategory(id) — the singular admin route
-// only exports PATCH/DELETE, confirmed against src/app/api/admin/categories/[id]/route.ts —
-// the edit page finds its record from this list instead.
-export function adminGetCategories(): Promise<CategoryWithCount[]> {
-  return apiFetch<CategoryWithCount[]>("/api/admin/categories", {
-    cache: "no-store",
-  });
-}
+// GET fetchers live in ./admin-list.ts (server-only — they need to forward the admin_token
+// cookie, which only works via next/headers). This file holds the mutation functions, which
+// run client-side from *-table.tsx/*-form.tsx and rely on the browser's own automatic
+// same-origin cookie forwarding, so they stay plain apiFetch with no special handling.
 
 export function adminCreateCategory(payload: CategoryPayload): Promise<Category> {
   return apiFetch<Category>("/api/admin/categories", {

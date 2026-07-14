@@ -1,4 +1,4 @@
-import { adminGetBrands } from "@/features/brands/api/admin";
+import { adminGetBrands } from "@/features/brands/api/admin-list";
 import { BrandsTable } from "@/features/brands/components/brands-table";
 
 export default async function AdminBrandsPage() {

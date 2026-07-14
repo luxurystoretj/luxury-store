@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { adminGetCategories } from "@/features/categories/api/admin";
+import { adminGetCategories } from "@/features/categories/api/admin-list";
 import { CategoryForm } from "@/features/categories/components/category-form";
 
 type PageProps = { params: Promise<{ id: string }> };

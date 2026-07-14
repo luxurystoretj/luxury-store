@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { adminGetBrands } from "@/features/brands/api/admin";
+import { adminGetBrands } from "@/features/brands/api/admin-list";
 import { BrandForm } from "@/features/brands/components/brand-form";
 
 type PageProps = { params: Promise<{ id: string }> };
