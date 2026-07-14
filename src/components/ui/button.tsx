@@ -22,6 +22,12 @@ const buttonVariants = cva(
         // Tertiary / text (DESIGN §7): no fill; underline appears on hover (1px) / active (2px) at 4px offset.
         ghost:
           "bg-transparent text-foreground underline-offset-4 hover:text-[var(--accent)] hover:underline hover:decoration-1 active:text-[var(--accent)] active:underline active:decoration-2 disabled:text-[var(--secondary)] disabled:no-underline",
+        // Destructive (admin-only, DESIGN §1 semantic --error): solid error red, same
+        // ghosted-gray disabled as primary. Hover/active shades aren't in DESIGN.md (only
+        // --accent has precomputed -8%/-15% L tokens) — hand-derived proportionally darker
+        // hex here, flagged as a judgment call in the partner report.
+        destructive:
+          "bg-destructive text-primary-foreground hover:bg-[#9C3636] active:bg-[#822D2D] disabled:bg-[var(--secondary)] disabled:text-primary-foreground",
       },
       size: {
         // DESIGN §3 button padding: medium 12/24, large 16/32 (padding-driven, no fixed height).
