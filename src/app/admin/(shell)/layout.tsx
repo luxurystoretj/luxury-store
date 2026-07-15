@@ -1,18 +1,12 @@
-import { redirect } from "next/navigation";
-
 import { AdminMobileBar, AdminSidebar } from "@/features/admin/components/admin-sidebar";
-import { isAdminAuthenticated } from "@/lib/auth/admin-auth";
 
-// Shell layout for authenticated /admin pages. Route group `(shell)` scopes
-// the auth check and chrome to admin content — /admin/login stays outside so
-// it can render without the sidebar and without triggering the redirect loop.
-export default async function AdminShellLayout({
+// Shell layout for authenticated /admin pages. Auth is enforced by
+// src/middleware.ts, which redirects unauthenticated requests to /admin/login
+// before this renders. The route group `(shell)` scopes the chrome to admin
+// content — /admin/login stays outside so it renders without the sidebar.
+export default function AdminShellLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  if (!(await isAdminAuthenticated())) {
-    redirect("/admin/login");
-  }
-
   return (
     <div className="flex min-h-dvh flex-col md:flex-row">
       <AdminSidebar />
