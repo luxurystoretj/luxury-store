@@ -5,6 +5,7 @@ import { getBrands } from "@/features/brands/api";
 import { getCategories } from "@/features/categories/api";
 import { adminGetProduct } from "@/features/products/api/admin-list";
 import { ProductForm } from "@/features/products/components/product-form";
+import { ImagesEditor } from "@/features/products/components/images-editor";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -27,6 +28,14 @@ export default async function EditProductPage({ params }: PageProps) {
         Редактировать товар
       </h1>
       <ProductForm product={product} brands={brands} categories={categories} />
+
+      <div className="max-w-2xl border-t border-border-subtle" />
+
+      <ImagesEditor
+        productId={product.id}
+        initialImages={product.images}
+        productName={product.nameRu}
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { adminServerFetch } from "@/lib/api/admin-server-fetch";
-import type { Product } from "@/features/products/types";
+import type { Product, ProductDetail } from "@/features/products/types";
 
 // Server-only (imports next/headers transitively via adminServerFetch) — only import from
 // Server Component pages, never from a "use client" file. Unlike brands/categories, a
@@ -10,6 +10,8 @@ export function adminGetProducts(): Promise<Product[]> {
   return adminServerFetch<Product[]>("/api/admin/products");
 }
 
-export function adminGetProduct(id: string): Promise<Product> {
-  return adminServerFetch<Product>(`/api/admin/products/${id}`);
+// Returns ProductDetail: GET /api/admin/products/:id includes relatedFrom (→ relatedProduct)
+// and all images, which the edit page needs to prefill the images editor and related picker.
+export function adminGetProduct(id: string): Promise<ProductDetail> {
+  return adminServerFetch<ProductDetail>(`/api/admin/products/${id}`);
 }

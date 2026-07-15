@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
-import type { Product } from "@/features/products/types";
+import type { Product, ProductImage } from "@/features/products/types";
 
 export interface SizePayload {
   size: string;
@@ -59,4 +59,20 @@ export function adminUpdateProduct(
 // isActive Switch, confirmed against src/app/api/admin/products/[id]/route.ts DELETE.
 export function adminDeleteProduct(id: string): Promise<void> {
   return apiFetch<void>(`/api/admin/products/${id}`, { method: "DELETE" });
+}
+
+// --- Product images ---
+// POST /api/admin/product-images is multipart/form-data (fields: file, productId, optional
+// sortOrder + altRu/altTj/altEn). Do NOT set Content-Type — the browser adds the multipart
+// boundary itself. The endpoint has no PATCH/GET, so images are add + delete only (no
+// reorder / alt-edit without a backend change).
+export function adminUploadProductImage(formData: FormData): Promise<ProductImage> {
+  return apiFetch<ProductImage>("/api/admin/product-images", {
+    method: "POST",
+    body: formData,
+  });
+}
+
+export function adminDeleteProductImage(id: string): Promise<void> {
+  return apiFetch<void>(`/api/admin/product-images/${id}`, { method: "DELETE" });
 }
