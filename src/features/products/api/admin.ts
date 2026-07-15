@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
-import type { Product, ProductImage } from "@/features/products/types";
+import type { Product, ProductDetail, ProductImage } from "@/features/products/types";
 
 export interface SizePayload {
   size: string;
@@ -75,4 +75,38 @@ export function adminUploadProductImage(formData: FormData): Promise<ProductImag
 
 export function adminDeleteProductImage(id: string): Promise<void> {
   return apiFetch<void>(`/api/admin/product-images/${id}`, { method: "DELETE" });
+}
+
+// --- Product relations ---
+// The endpoint creates ONE direction per call and deletes by the relation's own id. Related
+// products are symmetric (both PDPs show the pairing), so the picker makes two calls each way
+// — see related-products-picker.tsx. 409 (duplicate) on create and 404 (already gone) on
+// delete are treated as benign by the caller.
+export interface ProductRelationRow {
+  id: string;
+  productId: string;
+  relatedProductId: string;
+  createdAt: string;
+}
+
+export function adminCreateRelation(payload: {
+  productId: string;
+  relatedProductId: string;
+}): Promise<ProductRelationRow> {
+  return apiFetch<ProductRelationRow>("/api/admin/product-relations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function adminDeleteRelation(id: string): Promise<void> {
+  return apiFetch<void>(`/api/admin/product-relations/${id}`, { method: "DELETE" });
+}
+
+// Client-side product-detail fetch (browser auto-forwards the admin_token cookie). Used to
+// discover the reverse relation's id on removal — the current product's own data only carries
+// its forward relations, and product-relations has no GET to look up a row by pair.
+export function adminGetProductClient(id: string): Promise<ProductDetail> {
+  return apiFetch<ProductDetail>(`/api/admin/products/${id}`);
 }
