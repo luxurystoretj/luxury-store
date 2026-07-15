@@ -34,10 +34,10 @@ const SECTION_STATUS: readonly {
   status: SectionStatus;
 }[] = [
   { label: "Дашборд", href: "/admin", status: "ready" },
-  { label: "Товары", href: "/admin/products", status: "soon" },
-  { label: "Бренды", href: "/admin/brands", status: "soon" },
-  { label: "Категории", href: "/admin/categories", status: "soon" },
-  { label: "Главная", href: "/admin/homepage", status: "soon" },
+  { label: "Товары", href: "/admin/products", status: "ready" },
+  { label: "Бренды", href: "/admin/brands", status: "ready" },
+  { label: "Категории", href: "/admin/categories", status: "ready" },
+  { label: "Главная", href: "/admin/homepage", status: "ready" },
 ];
 
 export default async function AdminDashboardPage() {
@@ -55,9 +55,8 @@ export default async function AdminDashboardPage() {
           Дашборд
         </h1>
         <p className="max-w-[640px] text-sm text-foreground">
-          Обзор каталога. Управление разделами — в боковой панели.
-          Разделы товаров, брендов, категорий и главной страницы будут
-          подключены в следующих сеансах.
+          Обзор каталога. Управление товарами, брендами, категориями и
+          главной страницей доступно в боковой панели.
         </p>
       </header>
 
