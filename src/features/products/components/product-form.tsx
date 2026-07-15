@@ -145,11 +145,15 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
 
       if (product) {
         await adminUpdateProduct(product.id, payload);
+        router.refresh();
+        router.push("/admin/products");
       } else {
-        await adminCreateProduct(payload);
+        // Redirect to the new product's edit page so images / related products (which need an
+        // existing productId) can be added right after creation.
+        const created = await adminCreateProduct(payload);
+        router.refresh();
+        router.push(`/admin/products/${created.id}/edit`);
       }
-      router.refresh();
-      router.push("/admin/products");
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
         setServerError("Товар с таким slug уже существует.");
