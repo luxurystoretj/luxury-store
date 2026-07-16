@@ -26,8 +26,9 @@ export function LoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      // Force the shell layout's server-side auth check to re-run against
-      // the new admin_token cookie before navigation.
+      // The login POST set the admin_token cookie; refresh clears the client
+      // router cache so the /admin navigation re-runs middleware (the auth gate)
+      // against the new cookie.
       router.refresh();
       router.push("/admin");
     } catch (err) {

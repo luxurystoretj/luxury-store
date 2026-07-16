@@ -4,17 +4,22 @@ import type { NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
 
 /**
- * Single Edge middleware composing two concerns:
- *  - `/api/admin/*`  → the partner's custom admin auth (unchanged, see docs/updates.md)
+ * Single Edge middleware composing three concerns:
+ *  - `/api/admin/*`  → admin auth for machine clients; missing/invalid token → JSON 401
+ *  - `/admin/*`      → admin auth for humans; missing/invalid token → redirect to /admin/login.
+ *                      `/admin/login` itself stays public (and, if already authed, bounces to /admin)
  *  - everything else the matcher allows → next-intl locale routing
  *
- * Admin auth: a request is authorized only if it carries an `admin_token` cookie
- * whose value matches the SHA-256 hash of ADMIN_PASS (same value set by
- * `POST /api/auth/login`). Missing/invalid tokens get a 401 JSON response.
- * Runs on the Edge runtime, so it uses the Web Crypto API to hash.
+ * This middleware is the single source of truth for the `admin_token` check
+ * (both the API and the page tree). A request is authorized only if it carries
+ * an `admin_token` cookie whose value matches the SHA-256 hash of ADMIN_PASS
+ * (same value set by `POST /api/auth/login`, see docs/updates.md). Runs on the
+ * Edge runtime, so it uses the Web Crypto API to hash.
  */
 
 const intlMiddleware = createMiddleware(routing);
+
+const LOGIN_PATH = "/admin/login";
 
 function unauthorized() {
   return NextResponse.json(
@@ -31,28 +36,48 @@ async function sha256Hex(value: string): Promise<string> {
     .join("");
 }
 
+/**
+ * True only if the request carries a valid `admin_token` cookie. Fail-closed:
+ * a missing ADMIN_PASS or a missing/mismatched token all deny.
+ */
+async function isAdminAuthorized(request: NextRequest): Promise<boolean> {
+  const adminPass = process.env.ADMIN_PASS;
+  if (!adminPass) return false;
+
+  const token = request.cookies.get("admin_token")?.value;
+  if (!token) return false;
+
+  const expected = await sha256Hex(adminPass);
+  return token === expected;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Admin API: the partner's admin-auth check, verbatim.
+  // Admin API: machine clients get a machine-readable 401 on failure (unchanged).
   if (pathname.startsWith("/api/admin")) {
-    const adminPass = process.env.ADMIN_PASS;
-    if (!adminPass) {
-      // No configured password means no one can be authorized.
-      return unauthorized();
+    return (await isAdminAuthorized(request))
+      ? NextResponse.next()
+      : unauthorized();
+  }
+
+  // Admin pages: humans get redirected to the login form on failure.
+  if (pathname.startsWith("/admin")) {
+    const authorized = await isAdminAuthorized(request);
+
+    // The login page stays publicly reachable so there's a way to sign in.
+    // If the visitor is already authed, bounce them to the dashboard; otherwise
+    // let the form render. Never redirect the login page to itself (no loop).
+    if (pathname === LOGIN_PATH) {
+      return authorized
+        ? NextResponse.redirect(new URL("/admin", request.url))
+        : NextResponse.next();
     }
 
-    const token = request.cookies.get("admin_token")?.value;
-    if (!token) {
-      return unauthorized();
-    }
-
-    const expected = await sha256Hex(adminPass);
-    if (token !== expected) {
-      return unauthorized();
-    }
-
-    return NextResponse.next();
+    // Every other /admin/* page (including the bare /admin dashboard) requires auth.
+    return authorized
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL(LOGIN_PATH, request.url));
   }
 
   // Public localized pages.
@@ -61,9 +86,14 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Admin API — run admin auth (kept in the matcher; excluded from the intl branch below)
+    // Admin API — run admin auth (JSON 401 branch).
     "/api/admin/:path*",
-    // Public pages — exclude non-admin /api, Next internals, /admin, and files with a dot
+    // Admin pages — run admin auth (redirect branch). `:path*` matches zero or
+    // more segments, so this covers the bare `/admin` dashboard root as well as
+    // every sub-path (/admin/products, /admin/login, …).
+    "/admin/:path*",
+    // Public pages — exclude non-admin /api, Next internals, /admin, and files
+    // with a dot. (Unchanged: keeps next-intl off admin routes and internals.)
     "/((?!api|_next|_vercel|admin|.*\\..*).*)",
   ],
 };

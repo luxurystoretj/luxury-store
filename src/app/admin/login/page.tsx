@@ -1,13 +1,9 @@
-import { redirect } from "next/navigation";
-
 import { LoginForm } from "@/features/auth/components/login-form";
-import { isAdminAuthenticated } from "@/lib/auth/admin-auth";
 
-export default async function AdminLoginPage() {
-  if (await isAdminAuthenticated()) {
-    redirect("/admin");
-  }
-
+// Public login page. Auth is handled by src/middleware.ts: an already-authed
+// visitor is redirected to /admin before this renders, and unauthenticated
+// visitors are allowed through so the form is reachable.
+export default function AdminLoginPage() {
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-16">
       <div className="w-full max-w-md">
