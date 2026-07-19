@@ -26,8 +26,8 @@ export default async function HomePage({ params }: HomePageProps) {
       <div className="flex flex-col gap-16 md:gap-24 lg:gap-32">
         <Hero sections={sections} locale={localeTyped} />
         <NewArrivalsSection products={products} locale={localeTyped} />
-        <FeaturedSection products={products} locale={localeTyped} />
         <AboutSection sections={sections} locale={localeTyped} />
+        <FeaturedSection products={products} locale={localeTyped} />
         <ContactsTeaserSection sections={sections} locale={localeTyped} />
       </div>
     </Container>
