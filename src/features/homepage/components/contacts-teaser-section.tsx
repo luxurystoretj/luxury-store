@@ -40,20 +40,22 @@ async function ContactsTeaserSection({ sections, locale }: ContactsTeaserSection
   const tc = await getTranslations("Contacts")
 
   return (
-    <section className="mx-auto flex max-w-[640px] flex-col items-center gap-4 text-center">
-      <h2 className="font-display text-2xl">{title}</h2>
-      {subtitle && <p className="text-foreground">{subtitle}</p>}
-      <div className="flex flex-col gap-1 text-sm text-foreground">
-        <p>{tc("address.value")}</p>
-        <p>{tc("phone.value")}</p>
-        <p>{tc("email.value")}</p>
+    <section className="relative left-1/2 w-screen -translate-x-1/2 border-t border-b border-border-default bg-surface px-3 py-16 md:py-24">
+      <div className="mx-auto flex max-w-[640px] flex-col items-center gap-4 text-center">
+        <h2 className="font-display text-2xl">{title}</h2>
+        {subtitle && <p className="text-foreground">{subtitle}</p>}
+        <div className="flex flex-col gap-1 text-sm text-foreground">
+          <p>{tc("address.value")}</p>
+          <p>{tc("phone.value")}</p>
+          <p>{tc("email.value")}</p>
+        </div>
+        <Link
+          href="/contacts"
+          className="text-foreground underline decoration-border-default underline-offset-[3px] transition-colors duration-150 ease-out hover:text-[var(--accent)] hover:decoration-[var(--accent)] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          {t("contactsTeaser.cta")}
+        </Link>
       </div>
-      <Link
-        href="/contacts"
-        className="text-foreground underline decoration-border-default underline-offset-[3px] transition-colors duration-150 ease-out hover:text-[var(--accent)] hover:decoration-[var(--accent)] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      >
-        {t("contactsTeaser.cta")}
-      </Link>
     </section>
   )
 }

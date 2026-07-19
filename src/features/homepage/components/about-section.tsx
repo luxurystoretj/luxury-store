@@ -27,9 +27,11 @@ function AboutSection({ sections, locale }: AboutSectionProps) {
   })
 
   return (
-    <section className="mx-auto max-w-[640px] text-center">
-      <h2 className="mb-4 font-display text-2xl">{title}</h2>
-      {subtitle && <p className="text-foreground">{subtitle}</p>}
+    <section className="relative left-1/2 w-screen -translate-x-1/2 border-t border-b border-border-default bg-surface px-3 py-16 md:py-24">
+      <div className="mx-auto max-w-[640px] text-center">
+        <h2 className="mb-4 font-display text-2xl">{title}</h2>
+        {subtitle && <p className="text-foreground">{subtitle}</p>}
+      </div>
     </section>
   )
 }
