@@ -426,11 +426,14 @@ async function main() {
   await prisma.homepageSection.create({
     data: {
       sectionKey: "about",
-      ...titleTri("О бренде"),
+      ...titleTri("О нас"),
       ...subtitleTri(
-        "Мы собираем лучшие мужские костюмы и аксессуары от премиальных итальянских домов моды.",
+        "Luxury Store — кураторская подборка мужской одежды и аксессуаров от премиальных " +
+          "европейских домов для Худжанда и Душанбе. Мы выбираем бренды, которые ценят качество " +
+          "кроя и тканей выше громких логотипов. Наша аудитория — мужчины, которые предпочитают " +
+          "сдержанный стиль без лишнего шума.",
       ),
-      imageUrl: "https://placehold.co/1200x800?text=About+Brand",
+      imageUrl: null,
       isActive: true,
     },
   });
@@ -439,8 +442,10 @@ async function main() {
     data: {
       sectionKey: "contacts",
       ...titleTri("Контакты"),
-      ...subtitleTri("Душанбе, проспект Рудаки 123. Ежедневно с 10:00 до 21:00."),
-      imageUrl: "https://placehold.co/1200x800?text=Contacts",
+      ...subtitleTri(
+        "Свяжитесь с нами — мы всегда рады ответить на вопросы и помочь с выбором.",
+      ),
+      imageUrl: null,
       isActive: true,
     },
   });
