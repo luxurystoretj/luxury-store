@@ -6,13 +6,13 @@ import { LocaleSwitcher } from "@/components/layout/locale-switcher"
 import { MobileNav } from "@/components/layout/mobile-nav"
 import { navLinks } from "@/components/layout/nav-links"
 
-// DESIGN §2/§7/§10: non-sticky (MVP), hairline bottom border, tertiary-link nav states.
+// DESIGN §2/§7/§10: hairline bottom border, tertiary-link nav states.
 async function Header() {
   const t = await getTranslations("Nav")
 
   return (
-    <header className="border-b border-border-default">
-      <Container className="flex items-center justify-between gap-6 py-6">
+    <header className="sticky top-0 z-40 border-b border-border-default bg-background">
+      <Container className="flex items-center justify-between gap-6 py-4">
         <Link
           href="/"
           className="font-display text-xl font-normal text-foreground"

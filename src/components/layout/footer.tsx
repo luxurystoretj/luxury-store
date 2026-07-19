@@ -2,13 +2,13 @@ import { getTranslations } from "next-intl/server"
 
 import { Link } from "@/i18n/navigation"
 import { Container } from "@/components/layout/container"
-import { navLinks } from "@/components/layout/nav-links"
 
 // DESIGN §1 hard rule: secondary gray (#9B9489) is for >18px text only, never small
 // text — so all footer copy uses full-contrast graphite (text-foreground), not secondary.
 // Contacts are a placeholder stub; real data is a pending owner input.
+// Nav links dropped (owner decision): the header is sticky/always visible now, so
+// repeating the same links here just reads as a second nav bar at the bottom.
 async function Footer() {
-  const t = await getTranslations("Nav")
   const tf = await getTranslations("Footer")
 
   return (
@@ -21,18 +21,6 @@ async function Footer() {
           >
             Luxury Store
           </Link>
-
-          <nav className="flex flex-col gap-2 md:flex-row md:gap-8">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-foreground underline-offset-4 transition-colors duration-150 ease-out hover:text-[var(--accent)] hover:underline hover:decoration-1"
-              >
-                {t(item.labelKey)}
-              </Link>
-            ))}
-          </nav>
 
           <div className="flex flex-col gap-1 text-sm text-foreground">
             <span>{tf("cities")}</span>

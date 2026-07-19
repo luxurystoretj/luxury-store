@@ -29,16 +29,23 @@ async function Hero({ sections, locale }: HeroProps) {
     }) ?? t("tagline")
 
   return (
-    <section className="flex flex-col gap-8">
-      {hero?.imageUrl && (
-        <div className="relative aspect-[21/9] w-full overflow-hidden bg-surface">
-          <Image src={hero.imageUrl} alt={title} fill priority sizes="100vw" className="object-cover" />
+    <section>
+      {hero?.imageUrl ? (
+        <div className="relative left-1/2 w-screen -translate-x-1/2 px-1">
+          <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
+            <Image src={hero.imageUrl} alt={title} fill priority sizes="100vw" className="object-cover" />
+            <div className="absolute bottom-0 left-0 flex max-w-[640px] flex-col gap-2 p-6 md:gap-4 md:p-12">
+              <h1 className="font-display text-4xl md:text-5xl">{title}</h1>
+              <p className="text-foreground">{subtitle}</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="mx-auto flex max-w-[640px] flex-col gap-4 text-center">
+          <h1 className="font-display text-4xl md:text-5xl">{title}</h1>
+          <p className="text-foreground">{subtitle}</p>
         </div>
       )}
-      <div className="mx-auto flex max-w-[640px] flex-col gap-4 text-center">
-        <h1 className="font-display text-4xl md:text-5xl">{title}</h1>
-        <p className="text-foreground">{subtitle}</p>
-      </div>
     </section>
   )
 }

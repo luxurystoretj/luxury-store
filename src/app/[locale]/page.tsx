@@ -22,12 +22,12 @@ export default async function HomePage({ params }: HomePageProps) {
   const [sections, products] = await Promise.all([getHomepageSections(), getProducts()])
 
   return (
-    <Container className="py-16 md:py-24 lg:py-32">
+    <Container className="pb-16 md:pb-24 lg:pb-32">
       <div className="flex flex-col gap-16 md:gap-24 lg:gap-32">
         <Hero sections={sections} locale={localeTyped} />
         <NewArrivalsSection products={products} locale={localeTyped} />
-        <FeaturedSection products={products} locale={localeTyped} />
         <AboutSection sections={sections} locale={localeTyped} />
+        <FeaturedSection products={products} locale={localeTyped} />
         <ContactsTeaserSection sections={sections} locale={localeTyped} />
       </div>
     </Container>
