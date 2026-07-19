@@ -23,7 +23,7 @@ async function FeaturedSection({ products, locale }: FeaturedSectionProps) {
 
   return (
     <section>
-      <h2 className="mb-8 font-display text-2xl">{t("featured.heading")}</h2>
+      <h2 className="mb-8 text-center font-display text-2xl">{t("featured.heading")}</h2>
       <div className="relative left-1/2 w-screen -translate-x-1/2 px-3">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {featuredProducts.map((product, index) => (
