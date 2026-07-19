@@ -9,11 +9,13 @@ interface ProductCardProps {
   locale: Locale
   /** Above-fold (first grid row) → true, disables native lazy loading. */
   priority?: boolean
+  /** Show brand/name but omit price. Owner-requested exception for the home product rows. */
+  hidePrice?: boolean
 }
 
 // DESIGN §8: card content is strictly brand → name → price, nothing else.
 // DESIGN §7: hover = border-color shift + name underline only, no scale/shadow.
-function ProductCard({ product, locale, priority = false }: ProductCardProps) {
+function ProductCard({ product, locale, priority = false, hidePrice = false }: ProductCardProps) {
   const name = pickLocale(locale, {
     ru: product.nameRu,
     tj: product.nameTj,
@@ -42,12 +44,14 @@ function ProductCard({ product, locale, priority = false }: ProductCardProps) {
         <p className="mt-1 text-foreground underline-offset-4 group-hover:underline">
           {name}
         </p>
-        <p
-          className="mt-2 font-display text-[1.125rem]"
-          style={{ fontVariantNumeric: "lining-nums" }}
-        >
-          {formatPrice(product.priceTjs, "TJS", locale)}
-        </p>
+        {!hidePrice && (
+          <p
+            className="mt-2 font-display text-[1.125rem]"
+            style={{ fontVariantNumeric: "lining-nums" }}
+          >
+            {formatPrice(product.priceTjs, "TJS", locale)}
+          </p>
+        )}
       </div>
     </Link>
   )

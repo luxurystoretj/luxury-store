@@ -24,10 +24,18 @@ async function NewArrivalsSection({ products, locale }: NewArrivalsSectionProps)
   return (
     <section>
       <h2 className="mb-8 font-display text-2xl">{t("newArrivals.heading")}</h2>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8">
-        {newProducts.map((product, index) => (
-          <ProductCard key={product.id} product={product} locale={locale} priority={index === 0} />
-        ))}
+      <div className="relative left-1/2 w-screen -translate-x-1/2 px-3">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {newProducts.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              locale={locale}
+              priority={index === 0}
+              hidePrice
+            />
+          ))}
+        </div>
       </div>
     </section>
   )
