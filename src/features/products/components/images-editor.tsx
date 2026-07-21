@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { ApiError } from "@/lib/api/client"
 import { ConfirmDeleteRow } from "@/features/admin/components/confirm-delete-row"
+import { ALLOWED_IMAGE_TYPES as ALLOWED_TYPES, MAX_IMAGE_FILE_SIZE as MAX_FILE_SIZE } from "@/features/admin/lib/upload-constants"
 import {
   adminDeleteProductImage,
   adminUploadProductImage,
@@ -16,11 +17,6 @@ interface ImagesEditorProps {
   /** Used as the thumbnail alt in the admin (no next-intl context here for <ProductImage>). */
   productName: string;
 }
-
-// Mirror the server-side limits in src/app/api/admin/product-images/route.ts so bad files are
-// rejected before any network round-trip.
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 function sortImages(images: ProductImage[]): ProductImage[] {
   return [...images].sort((a, b) => a.sortOrder - b.sortOrder);
