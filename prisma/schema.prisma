@@ -44,6 +44,9 @@ model Category {
   // Category -> Products (1 to many)
   products Product[]
 
+  // Category -> CategoryBanners (1 to many)
+  categoryBanners CategoryBanner[]
+
   @@map("categories")
 }
 
@@ -135,6 +138,24 @@ model ProductRelation {
   @@index([productId])
   @@index([relatedProductId])
   @@map("product_relations")
+}
+
+// 2.9. category_banners (home-page banner slides, image-only, linked to a Category)
+model CategoryBanner {
+  id         String   @id @default(cuid())
+  imageUrl   String   @map("image_url")
+  imageKey   String   @map("image_key")
+  categoryId String   @map("category_id")
+  sortOrder  Int      @default(0) @map("sort_order")
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([sortOrder])
+  @@index([categoryId])
+  @@map("category_banners")
 }
 
 // 2.8. homepage_sections (independent content table)

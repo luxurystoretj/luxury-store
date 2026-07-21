@@ -13,4 +13,5 @@ export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   { label: "Бренды", href: "/admin/brands" },
   { label: "Категории", href: "/admin/categories" },
   { label: "Главная", href: "/admin/homepage" },
+  { label: "Баннеры категорий", href: "/admin/category-banners" },
 ];

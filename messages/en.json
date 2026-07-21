@@ -4,6 +4,11 @@
     "tagline": "A premium menswear boutique. Catalogue, brands, exclusive looks."
   },
   "Home": {
+    "categoryBanners": {
+      "previous": "Previous banner",
+      "next": "Next banner",
+      "goToSlide": "Go to banner {index}"
+    },
     "newArrivals": {
       "heading": "New Arrivals"
     },
