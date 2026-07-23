@@ -48,6 +48,7 @@
     "title": "Catalog",
     "sort": {
       "label": "Sort by",
+      "heading": "Sort",
       "new": "Newest",
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low"

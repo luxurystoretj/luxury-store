@@ -50,7 +50,7 @@ export default async function CatalogPage({ params, searchParams }: CatalogPageP
           <SearchInput />
         </div>
         <FilterToolbar brands={brands} categories={categories} sizes={sizes} />
-        <div className="mb-6 flex items-center gap-3">
+        <div className="mb-6 flex items-center gap-3 lg:hidden">
           <MobileFilterSheet brands={brands} categories={categories} sizes={sizes} />
           <div className="flex-1" />
           <SortControl />
