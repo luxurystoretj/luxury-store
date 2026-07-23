@@ -1,152 +1,187 @@
 "use client"
 
+import { useState } from "react"
+import { ChevronDownIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { UIIcon } from "@/components/ui/ui-icon"
 import { useCatalogParams } from "@/components/catalog/catalog-params-provider"
 import { colorOptions } from "@/components/catalog/color-options"
+import { cn } from "@/lib/utils"
 import { pickLocale, type Locale } from "@/lib/locale"
 import type { Brand } from "@/features/brands/types"
 import type { Category } from "@/features/categories/types"
-
-const ALL_VALUE = "__all__"
 
 interface FilterFieldsProps {
   brands: Brand[]
   categories: Category[]
   sizes: string[]
+  // Desktop only (FilterToolbar) — MobileFilterSheet has its own reset in the
+  // sheet footer already, so the inline row reset stays opt-in to avoid a
+  // second, redundant reset control there.
+  showReset?: boolean
+}
+
+interface MultiSelectOption {
+  value: string
+  label: string
+}
+
+// VISUAL MOCKUP ONLY (owner request, 2026-07-22) — brand/category/color/size
+// were real single-select controls wired to URL params (brand/category via
+// Select, color/size via Badge toggle groups). This renders the same trigger
+// chrome the original Select used (classes copied verbatim) but opens a
+// checkbox Menu instead, and keeps checked state in plain useState local to
+// this component. NOT wired to useCatalogParams, does not touch the URL or
+// the product grid. Purely to preview the look and interaction before
+// deciding whether to build it for real (which would need a backend change:
+// the API's brand/category/color/size params are single-value today).
+function MultiSelectFilter({
+  label,
+  placeholder,
+  options,
+  selected,
+  onToggle,
+}: {
+  label: string
+  placeholder: string
+  options: MultiSelectOption[]
+  selected: string[]
+  onToggle: (value: string) => void
+}) {
+  const t = useTranslations("Catalog.filters")
+  const triggerText = selected.length === 0 ? placeholder : t("selectedCount", { count: selected.length })
+
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-xs font-semibold tracking-[0.12em] text-foreground uppercase">
+        {label}
+      </label>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          aria-label={label}
+          className="flex w-full items-center justify-between gap-2 rounded-sm border border-border-default bg-background px-3.5 py-3 text-base text-foreground transition-colors duration-150 ease-out outline-none select-none hover:border-border-hover focus-visible:border-border-strong focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:w-48"
+        >
+          <span className={cn("truncate", selected.length === 0 && "text-[var(--secondary)]")}>
+            {triggerText}
+          </span>
+          <UIIcon icon={ChevronDownIcon} size={16} className="shrink-0 text-[var(--secondary)]" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="min-w-[var(--anchor-width)]">
+          {options.map((option) => (
+            <DropdownMenuCheckboxItem
+              key={option.value}
+              checked={selected.includes(option.value)}
+              onCheckedChange={() => onToggle(option.value)}
+            >
+              {option.label}
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  )
 }
 
 // Shared filter controls, rendered by both FilterToolbar (desktop) and
 // MobileFilterSheet — the actual read/write logic lives here once so desktop
-// and mobile never diverge. Brand/category are Select dropdowns (longer,
-// actively-growing lists); color/size are Badge toggle groups (DESIGN §7).
-// All four are single-select — the API takes one value per param, not arrays —
-// so clicking an already-selected badge clears it.
-function FilterFields({ brands, categories, sizes }: FilterFieldsProps) {
+// and mobile never diverge. All four (brand/category/color/size) are mock
+// multi-select dropdowns for now — see MultiSelectFilter above.
+function FilterFields({ brands, categories, sizes, showReset = false }: FilterFieldsProps) {
   const t = useTranslations("Catalog.filters")
   const locale = useLocale() as Locale
   const { params, setParams } = useCatalogParams()
+  const hasActiveFilters = Boolean(params.brand || params.category || params.color || params.size)
 
-  const brandLabel = (slug: string) =>
-    slug === ALL_VALUE ? t("allBrands") : (brands.find((b) => b.slug === slug)?.name ?? slug)
-  const categoryLabel = (slug: string) => {
-    if (slug === ALL_VALUE) return t("allCategories")
-    const category = categories.find((c) => c.slug === slug)
-    return category
-      ? pickLocale(locale, { ru: category.nameRu, tj: category.nameTj, en: category.nameEn })
-      : slug
-  }
+  const [mockSelectedBrands, setMockSelectedBrands] = useState<string[]>([])
+  const [mockSelectedCategories, setMockSelectedCategories] = useState<string[]>([])
+  const [mockSelectedColors, setMockSelectedColors] = useState<string[]>([])
+  const [mockSelectedSizes, setMockSelectedSizes] = useState<string[]>([])
+  const toggleMockBrand = (value: string) =>
+    setMockSelectedBrands((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    )
+  const toggleMockCategory = (value: string) =>
+    setMockSelectedCategories((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    )
+  const toggleMockColor = (value: string) =>
+    setMockSelectedColors((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    )
+  const toggleMockSize = (value: string) =>
+    setMockSelectedSizes((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    )
 
   return (
     <div className="flex flex-wrap items-start gap-6">
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-semibold tracking-[0.12em] text-foreground uppercase">
-          {t("brand")}
-        </label>
-        <Select
-          value={params.brand ?? ALL_VALUE}
-          onValueChange={(next: unknown) =>
-            setParams({ brand: next === ALL_VALUE ? undefined : (next as string) })
-          }
-        >
-          <SelectTrigger aria-label={t("brand")} className="w-full sm:w-48">
-            <SelectValue>{(v: unknown) => brandLabel((v as string) ?? ALL_VALUE)}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL_VALUE}>{t("allBrands")}</SelectItem>
-            {brands.map((brand) => (
-              <SelectItem key={brand.id} value={brand.slug}>
-                {brand.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <MultiSelectFilter
+        label={t("brand")}
+        placeholder={t("allBrands")}
+        options={brands.map((brand) => ({ value: brand.slug, label: brand.name }))}
+        selected={mockSelectedBrands}
+        onToggle={toggleMockBrand}
+      />
 
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-semibold tracking-[0.12em] text-foreground uppercase">
-          {t("category")}
-        </label>
-        <Select
-          value={params.category ?? ALL_VALUE}
-          onValueChange={(next: unknown) =>
-            setParams({ category: next === ALL_VALUE ? undefined : (next as string) })
-          }
-        >
-          <SelectTrigger aria-label={t("category")} className="w-full sm:w-48">
-            <SelectValue>{(v: unknown) => categoryLabel((v as string) ?? ALL_VALUE)}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL_VALUE}>{t("allCategories")}</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.slug}>
-                {pickLocale(locale, {
-                  ru: category.nameRu,
-                  tj: category.nameTj,
-                  en: category.nameEn,
-                })}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <MultiSelectFilter
+        label={t("category")}
+        placeholder={t("allCategories")}
+        options={categories.map((category) => ({
+          value: category.slug,
+          label:
+            pickLocale(locale, {
+              ru: category.nameRu,
+              tj: category.nameTj,
+              en: category.nameEn,
+            }) ?? category.slug,
+        }))}
+        selected={mockSelectedCategories}
+        onToggle={toggleMockCategory}
+      />
 
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-semibold tracking-[0.12em] text-foreground uppercase">
-          {t("color")}
-        </p>
-        <div className="flex max-w-md flex-wrap gap-2">
-          {colorOptions.map((option) => (
-            <Badge
-              key={option.value}
-              variant={params.color === option.value ? "selected" : "default"}
-              render={
-                <button
-                  type="button"
-                  onClick={() =>
-                    setParams({
-                      color: params.color === option.value ? undefined : option.value,
-                    })
-                  }
-                />
-              }
-            >
-              {pickLocale(locale, { ru: option.value, tj: option.value, en: option.labelEn })}
-            </Badge>
-          ))}
-        </div>
-      </div>
+      <MultiSelectFilter
+        label={t("color")}
+        placeholder={t("allColors")}
+        options={colorOptions.map((option) => ({
+          value: option.value,
+          label: pickLocale(locale, { ru: option.value, tj: option.value, en: option.labelEn }) ?? option.value,
+        }))}
+        selected={mockSelectedColors}
+        onToggle={toggleMockColor}
+      />
 
       {sizes.length > 0 && (
+        <MultiSelectFilter
+          label={t("size")}
+          placeholder={t("allSizes")}
+          options={sizes.map((size) => ({ value: size, label: size }))}
+          selected={mockSelectedSizes}
+          onToggle={toggleMockSize}
+        />
+      )}
+
+      {showReset && hasActiveFilters && (
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold tracking-[0.12em] text-foreground uppercase">
-            {t("size")}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((size) => (
-              <Badge
-                key={size}
-                variant={params.size === size ? "selected" : "default"}
-                render={
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setParams({ size: params.size === size ? undefined : size })
-                    }
-                  />
-                }
-              >
-                {size}
-              </Badge>
-            ))}
-          </div>
+          <span className="invisible text-xs font-semibold tracking-[0.12em] uppercase" aria-hidden="true">
+            {t("reset")}
+          </span>
+          <Button
+            type="button"
+            variant="ghost"
+            className="px-0 py-3"
+            onClick={() =>
+              setParams({ brand: undefined, category: undefined, color: undefined, size: undefined })
+            }
+          >
+            {t("reset")}
+          </Button>
         </div>
       )}
     </div>

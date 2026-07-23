@@ -57,8 +57,11 @@ function SelectContent({
 }: React.ComponentProps<typeof SelectPrimitive.Popup> & { sideOffset?: number }) {
   return (
     <SelectPrimitive.Portal>
+      {/* alignItemWithTrigger defaults true, which overlaps the popup on the
+          selected item instead of dropping below the trigger — forced off. */}
       <SelectPrimitive.Positioner
         sideOffset={sideOffset}
+        alignItemWithTrigger={false}
         className="z-50 outline-none"
       >
         <SelectPrimitive.Popup

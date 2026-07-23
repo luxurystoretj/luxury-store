@@ -48,6 +48,7 @@
     "title": "Каталог",
     "sort": {
       "label": "Сортировать",
+      "heading": "Сортировка",
       "new": "Новинки",
       "priceAsc": "Цена: по возрастанию",
       "priceDesc": "Цена: по убыванию"
@@ -66,6 +67,9 @@
       "size": "Размер",
       "allBrands": "Все бренды",
       "allCategories": "Все категории",
+      "allColors": "Все цвета",
+      "allSizes": "Все размеры",
+      "selectedCount": "Выбрано: {count}",
       "reset": "Сбросить",
       "showResults": "Показать результаты"
     },

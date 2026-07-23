@@ -43,14 +43,14 @@ export default async function CatalogPage({ params, searchParams }: CatalogPageP
   const t = await getTranslations("Catalog")
 
   return (
-    <Container className="py-8 md:py-12">
+    <Container className="pt-4 pb-8 md:pt-6 md:pb-12">
       <CatalogParamsProvider>
-        <h1 className="mb-8 font-display text-3xl">{t("title")}</h1>
+        <h1 className="mb-4 font-display text-3xl">{t("title")}</h1>
         <div className="mb-6">
           <SearchInput />
         </div>
         <FilterToolbar brands={brands} categories={categories} sizes={sizes} />
-        <div className="mb-6 flex items-center gap-3">
+        <div className="mb-6 flex items-center gap-3 lg:hidden">
           <MobileFilterSheet brands={brands} categories={categories} sizes={sizes} />
           <div className="flex-1" />
           <SortControl />

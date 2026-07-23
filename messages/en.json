@@ -48,6 +48,7 @@
     "title": "Catalog",
     "sort": {
       "label": "Sort by",
+      "heading": "Sort",
       "new": "Newest",
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low"
@@ -66,6 +67,9 @@
       "size": "Size",
       "allBrands": "All brands",
       "allCategories": "All categories",
+      "allColors": "All colors",
+      "allSizes": "All sizes",
+      "selectedCount": "Selected: {count}",
       "reset": "Reset",
       "showResults": "Show results"
     },
