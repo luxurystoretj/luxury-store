@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -21,6 +22,10 @@ interface FilterFieldsProps {
   brands: Brand[]
   categories: Category[]
   sizes: string[]
+  // Desktop only (FilterToolbar) — MobileFilterSheet has its own reset in the
+  // sheet footer already, so the inline row reset stays opt-in to avoid a
+  // second, redundant reset control there.
+  showReset?: boolean
 }
 
 // Shared filter controls, rendered by both FilterToolbar (desktop) and
@@ -29,10 +34,11 @@ interface FilterFieldsProps {
 // actively-growing lists); color/size are Badge toggle groups (DESIGN §7).
 // All four are single-select — the API takes one value per param, not arrays —
 // so clicking an already-selected badge clears it.
-function FilterFields({ brands, categories, sizes }: FilterFieldsProps) {
+function FilterFields({ brands, categories, sizes, showReset = false }: FilterFieldsProps) {
   const t = useTranslations("Catalog.filters")
   const locale = useLocale() as Locale
   const { params, setParams } = useCatalogParams()
+  const hasActiveFilters = Boolean(params.brand || params.category || params.color || params.size)
 
   const brandLabel = (slug: string) =>
     slug === ALL_VALUE ? t("allBrands") : (brands.find((b) => b.slug === slug)?.name ?? slug)
@@ -147,6 +153,24 @@ function FilterFields({ brands, categories, sizes }: FilterFieldsProps) {
               </Badge>
             ))}
           </div>
+        </div>
+      )}
+
+      {showReset && hasActiveFilters && (
+        <div className="flex flex-col gap-2">
+          <span className="invisible text-xs font-semibold tracking-[0.12em] uppercase" aria-hidden="true">
+            {t("reset")}
+          </span>
+          <Button
+            type="button"
+            variant="ghost"
+            className="px-0 py-3"
+            onClick={() =>
+              setParams({ brand: undefined, category: undefined, color: undefined, size: undefined })
+            }
+          >
+            {t("reset")}
+          </Button>
         </div>
       )}
     </div>

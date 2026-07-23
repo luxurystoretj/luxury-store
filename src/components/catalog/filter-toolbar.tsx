@@ -15,7 +15,7 @@ interface FilterToolbarProps {
 function FilterToolbar({ brands, categories, sizes }: FilterToolbarProps) {
   return (
     <div className="mb-6 hidden border-b border-border-subtle pb-6 lg:block">
-      <FilterFields brands={brands} categories={categories} sizes={sizes} />
+      <FilterFields brands={brands} categories={categories} sizes={sizes} showReset />
     </div>
   )
 }
