@@ -66,6 +66,9 @@
       "size": "Size",
       "allBrands": "All brands",
       "allCategories": "All categories",
+      "allColors": "All colors",
+      "allSizes": "All sizes",
+      "selectedCount": "Selected: {count}",
       "reset": "Reset",
       "showResults": "Show results"
     },

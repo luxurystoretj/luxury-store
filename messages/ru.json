@@ -66,6 +66,9 @@
       "size": "Размер",
       "allBrands": "Все бренды",
       "allCategories": "Все категории",
+      "allColors": "Все цвета",
+      "allSizes": "Все размеры",
+      "selectedCount": "Выбрано: {count}",
       "reset": "Сбросить",
       "showResults": "Показать результаты"
     },
